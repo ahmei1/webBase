@@ -1,65 +1,78 @@
 import { useState } from "react";
-import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 function Navbar() {
-  const [hidden, setHidden] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const homeSection = document.getElementById("home");
-      if (!homeSection) return;
+  const navLinks = [
+    { name: "Home", href: "#home" },
+    { name: "About", href: "#about" },
+    { name: "Services", href: "#services" },
+    { name: "Contact", href: "#contact" },
+    { name: "Price", href: "#price" },
+    { name: "Our Work", href: "#our-work" },
+  ];
 
-      // Get the position of the bottom of your Hero/Home section
-      const homeBottom = homeSection.getBoundingClientRect().bottom;
-
-      // When the bottom of 'home' is less than or equal to 0, 
-      // it means the section is completely off-screen (scrolled up).
-      if (homeBottom <= 0) {
-        setHidden(true); // Navbar hides
-      } else {
-        setHidden(false); // Navbar reappears when you scroll back up to Hero
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
   return (
-    <nav
-      className={`
-  w-fit my-5 bg-[#1a1a1a]/50 p-3 rounded-4xl align-middle z-auto 
-  backdrop-blur-lg border border-white/20 fixed top-0 left-1/2 -translate-x-1/2 text-white 
-  transition-all duration-500 ease-in-out
-  ${hidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-1 opacity-100 pointer-events-auto"}
-`}
-    >
-      <div>
-        <ul className="flex m-3 justify-center gap-15 p-3 ">
-          <h1 className=" text-4xl font-bold">
+    <nav className="relative top-5 left-1/2 -translate-x-1/2 z-100 w-[95%] md:w-fit">
+      <div className="bg-[#1a1a1a]/50 backdrop-blur-md border border-white/20 rounded-full px-6 py-3 md:py-2">
+        <div className="flex items-center justify-between md:justify-center md:gap-12">
+          
+          {/* LOGO */}
+          <h1 className="text-2xl md:text-4xl font-bold p-5">
             <a href="#home">
-              web<span className=" text-[#FF7F11] ">Base.</span>
+              web<span className="text-[#FF7F11]">Base.</span>
             </a>
           </h1>
-          <li className="my-3 text-[17px]">
-            <a href="#home">Home</a>
-          </li>
-          <li className="my-3 text-[17px]">
-            <a href="#about">About</a>
-          </li>
-          <li className="my-3 text-[17px]">
-            <a href="#services">Services</a>
-          </li>
-          <li className="my-3 text-[17px]">
-            <a href="#contact">Contact</a>
-          </li>
-          <li className="my-3 text-[17px]">
-            <a href="#price">Price</a>
-          </li>
-          <li className="my-3 text-[17px]">
-            <a href="#our-work">Our Work</a>
-          </li>
-        </ul>
+
+          {/* DESKTOP LINKS */}
+          <ul className="hidden md:flex items-center gap-8 lg:gap-12">
+            {navLinks.map((link) => (
+              <li key={link.name} className="text-[17px] hover:text-[#FF7F11] transition-colors">
+                <a href={link.href}>{link.name}</a>
+              </li>
+            ))}
+          </ul>
+
+          {/* MOBILE TOGGLE BUTTON */}
+          <button 
+            className="md:hidden text-white p-2"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <div className="space-y-1.5">
+              <span className={`block w-6 h-0.5 bg-white transition-transform ${isOpen ? "rotate-45 translate-y-2" : ""}`}></span>
+              <span className={`block w-6 h-0.5 bg-white transition-opacity ${isOpen ? "opacity-0" : ""}`}></span>
+              <span className={`block w-6 h-0.5 bg-white transition-transform ${isOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
+            </div>
+          </button>
+        </div>
       </div>
+
+      {/* MOBILE MENU DROPDOWN */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-30 left-0  w-full bg-[#1a1a1a]/95 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:hidden overflow-hidden"
+          >
+            <ul className="flex flex-col items-center gap-6">
+              {navLinks.map((link) => (
+                <li key={link.name} className="text-xl">
+                  <a 
+                    href={link.href} 
+                    onClick={() => setIsOpen(false)}
+                    className="hover:text-[#FF7F11]"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

@@ -10,14 +10,14 @@ import Contact from './pages/Contact'
 function App() {
   return (
     <>
-      <Navbar />
-
+      
       <section id="home" style={{ height: "100vh" }}><Hero /></section>
       <section id="about" style={{ height: "100vh" }}><About /></section>
       <section id="services" style={{ height: "100vh" }}><Services /></section>
       <section id="price" style={{ height: "100vh" }}><Price /></section>
       <section id="our-work" style={{ height: "100vh" }}><OurWork /></section>
       <section id="contact" style={{ height: "100vh" }}><Contact /></section>
+
     </>
   );
 }
