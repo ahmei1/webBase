@@ -6,10 +6,13 @@ const FlowButton = ({ text = "Modern Button" }) => {
     <button className="
       group relative flex items-center gap-1 overflow-hidden 
       rounded-[100px] border-[1.5px] border-[#333333]/40 bg-transparent 
-      px-8 py-3 text-sm font-semibold text-white cursor-pointer 
+      px-8 py-3  font-semibold text-white cursor-pointer 
       transition-all duration-600ms ease-[cubic-bezier(0.23,1,0.32,1)] 
       hover:border-transparent hover:text-white hover:rounded-12px
-      active:scale-0.95 hover:bg-[#FF7F11]
+      active:scale-0.95 hover:bg-[#FF7F11]  w-full sm:w-auto
+      sm:px-6 sm:py-3
+      text-base sm:text-lg
+      
     ">
       
       {/* Left arrow (appears on hover) */}
