@@ -7,9 +7,9 @@ export default function About() {
   return (
     <section
       id="about"
-      className="bg-[#181818] text-white py-16 md:py-24 lg:py-32 px-5 sm:px-10 md:px-16"
+      className="bg-[#181818] text-white py-10 md:py-24 lg:py-32  sm:px-10 md:px-16"
     >
-      <div className="max-w-[1400px] mx-auto flex flex-col">
+      <div className="max-w-350 mx-auto flex flex-col">
 
         {/* ── Hero Text ── */}
         <div>
@@ -132,9 +132,10 @@ export default function About() {
         </div>
 
         {/* ── Timeline ── */}
-        <div className="mt-16 md:mt-24">
+        <div className="mt-16 w-full">
           <TimelineDemo />
         </div>
+
 
       </div>
     </section>

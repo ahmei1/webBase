@@ -237,10 +237,10 @@ function PhaseSlide({ phase, index, progress }) {
   return (
     <motion.div
       style={{ opacity, scale }}
-      className="absolute inset-0 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 lg:gap-24 px-8 sm:px-16 md:px-20 lg:px-32 pointer-events-none"
+      className="absolute inset-0 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 lg:gap-24  px-8 sm:px-16 md:px-20 lg:px-32 pointer-events-none"
     >
       {/* ── Left: illustration ── */}
-      <motion.div style={{ y }} className="flex-shrink-0 w-44 h-44 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 relative">
+      <motion.div style={{ y }} className="shrink-0 w-44 h-44 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 relative">
         {/* Ambient glow ring */}
         <div className="absolute inset-0 rounded-full bg-[#FF7F11] opacity-[0.06] blur-3xl scale-150" />
         <IllComp active={true} />
@@ -257,7 +257,7 @@ function PhaseSlide({ phase, index, progress }) {
 
         {/* Big phase number watermark */}
         <div className="relative mb-1">
-          <span className="absolute -top-8 -left-2 md:-left-6 text-[7rem] md:text-[9rem] font-black text-white/[0.03] leading-none select-none pointer-events-none">
+          <span className="absolute -top-8 -left-2 md:-left-6 text-[7rem] md:text-[15rem] font-black text-white/10 leading-none select-none pointer-events-none">
             {phase.num}
           </span>
           <p className="text-xs sm:text-sm tracking-[0.4em] uppercase text-gray-500 mb-2 relative z-10">
@@ -306,7 +306,7 @@ export default function TimelineDemo() {
   }, [scrollYProgress]);
 
   return (
-    <div ref={containerRef} style={{ height: `${phases.length * 120}vh` }} className="relative bg-[#181818]">
+    <div ref={containerRef} style={{ height: `${phases.length * 150}vh` }} className="relative  bg-[#181818]">
 
       {/* Sticky viewport */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#181818]">
@@ -329,7 +329,7 @@ export default function TimelineDemo() {
 
         {/* ── Header ── */}
         <div className="absolute top-6 left-6 sm:top-10 sm:left-10 z-30">
-          <p className="text-[10px] sm:text-xs tracking-[0.4em] uppercase text-gray-600">
+          <p className="text-3xl sm:text-3xl tracking-[0.4em] uppercase text-gray-500">
             How We Work
           </p>
         </div>
@@ -386,7 +386,7 @@ export default function TimelineDemo() {
               exit={{ opacity: 0 }}
               className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2"
             >
-              <span className="text-xs tracking-widest uppercase text-gray-600">Scroll</span>
+              <span className="text-xs tracking-widest uppercase text-gray-500">Scroll</span>
               <motion.div
                 className="w-px h-8 bg-gradient-to-b from-[#FF7F11] to-transparent"
                 animate={{ scaleY: [0, 1, 0] }}
@@ -404,7 +404,7 @@ export default function TimelineDemo() {
         </div>
 
         {/* ── Bottom progress bar ── */}
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gray-800/50 z-30">
+        <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-gray-800/50 z-30">
           <motion.div
             className="h-full bg-[#FF7F11] origin-left"
             style={{ scaleX: scrollYProgress }}
