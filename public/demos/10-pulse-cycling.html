@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — Indoor Cycling Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,700;0,900;1,900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080810;
+    --dark: #0e0e18;
+    --blue: #0066ff;
+    --blue-bright: #3385ff;
+    --blue-glow: rgba(0,102,255,0.3);
+    --cyan: #00d4ff;
+    --white: #f0f4ff;
+    --grey: #5a6080;
+    --panel: #12121e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Inter', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* GLOW EFFECTS */
+  .glow { box-shadow: 0 0 40px var(--blue-glow); }
+  .text-glow { text-shadow: 0 0 30px rgba(0,102,255,0.5); }
+
+  /* NAV */
+  nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 0 60px; height: 68px; display: flex; align-items: center; justify-content: space-between; background: rgba(8,8,16,0.9); border-bottom: 1px solid rgba(0,102,255,0.2); backdrop-filter: blur(16px); }
+  .nav-logo { font-family: 'Exo 2', sans-serif; font-size: 30px; font-weight: 900; letter-spacing: 4px; background: linear-gradient(90deg, var(--blue), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a { color: var(--grey); text-decoration: none; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-cta { background: var(--blue); color: var(--white); padding: 10px 28px; border: none; font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+  .nav-cta:hover { background: var(--blue-bright); box-shadow: 0 0 20px var(--blue-glow); }
+
+  /* HERO */
+  .hero { padding-top: 68px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .hero-glow-orb { position: absolute; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(0,102,255,0.15) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+  .hero-glow-orb2 { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%); top: 20%; right: 10%; pointer-events: none; }
+  .hero-grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,102,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,102,255,0.03) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-content { padding: 60px; position: relative; z-index: 2; max-width: 900px; }
+  .hero-pill { display: inline-flex; align-items: center; gap: 10px; background: rgba(0,102,255,0.15); border: 1px solid rgba(0,102,255,0.3); padding: 8px 20px; border-radius: 100px; margin-bottom: 36px; }
+  .hero-pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); animation: blink 1.5s infinite; }
+  .hero-pill-text { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--cyan); }
+  .hero-title { font-family: 'Exo 2', sans-serif; font-size: clamp(72px, 13vw, 160px); font-weight: 900; line-height: 0.85; letter-spacing: -4px; margin-bottom: 36px; }
+  .hero-title .outline { -webkit-text-stroke: 2px rgba(255,255,255,0.3); color: transparent; }
+  .hero-title .blue { color: var(--blue); text-shadow: 0 0 60px rgba(0,102,255,0.6); }
+  .hero-desc { font-size: 16px; color: var(--grey); line-height: 1.8; max-width: 520px; margin-bottom: 48px; }
+  .hero-ctas { display: flex; gap: 16px; }
+  .cta-blue { background: var(--blue); color: var(--white); padding: 16px 48px; border: none; font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 2px; cursor: pointer; border-radius: 4px; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .cta-blue:hover { background: var(--blue-bright); box-shadow: 0 0 40px var(--blue-glow); }
+  .cta-outline { background: transparent; color: var(--white); padding: 16px 48px; border: 1px solid rgba(255,255,255,0.15); font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 2px; cursor: pointer; border-radius: 4px; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .cta-outline:hover { border-color: var(--blue); color: var(--cyan); }
+  .hero-stats-row { display: flex; gap: 0; margin-top: 80px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .hero-stat { padding: 32px 48px; border-right: 1px solid rgba(255,255,255,0.06); }
+  .hero-stat:last-child { border-right: none; }
+  .stat-num { font-family: 'Exo 2', sans-serif; font-size: 48px; font-weight: 900; background: linear-gradient(135deg, var(--blue), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+  .stat-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); margin-top: 8px; }
+
+  /* FEATURES */
+  .features { padding: 100px 60px; background: var(--dark); border-top: 1px solid rgba(0,102,255,0.1); }
+  .feat-tag { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; display: block; }
+  .features-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; }
+  .features-head h2 { font-family: 'Exo 2', sans-serif; font-size: clamp(40px, 6vw, 72px); font-weight: 900; line-height: 0.95; }
+  .features-head h2 .blue { color: var(--blue); }
+  .features-head p { max-width: 300px; color: var(--grey); font-size: 14px; line-height: 1.8; text-align: right; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .feat-card { background: var(--panel); border: 1px solid rgba(0,102,255,0.1); border-radius: 12px; padding: 44px 36px; transition: all 0.3s; }
+  .feat-card:hover { border-color: var(--blue); transform: translateY(-4px); box-shadow: 0 8px 40px rgba(0,102,255,0.15); }
+  .feat-meter { width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(0,102,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 24px; }
+  .feat-card h3 { font-family: 'Exo 2', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+  .feat-card p { font-size: 14px; color: var(--grey); line-height: 1.8; }
+
+  /* PRICING */
+  .pricing { padding: 100px 60px; border-top: 1px solid rgba(0,102,255,0.1); }
+  .pricing-tag { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; display: block; }
+  .pricing-head { text-align: center; margin-bottom: 64px; }
+  .pricing-head h2 { font-family: 'Exo 2', sans-serif; font-size: clamp(40px, 6vw, 72px); font-weight: 900; line-height: 0.95; }
+  .pricing-head h2 .blue { color: var(--blue); }
+  .pricing-head p { color: var(--grey); font-size: 15px; margin-top: 16px; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 1100px; margin: 0 auto; }
+  .plan { background: var(--panel); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 44px 36px; display: flex; flex-direction: column; transition: all 0.3s; }
+  .plan:hover { transform: translateY(-6px); }
+  .plan.lit { border-color: var(--blue); box-shadow: 0 0 40px rgba(0,102,255,0.2); }
+  .plan-badge { display: inline-block; background: var(--blue); color: var(--white); padding: 4px 16px; border-radius: 100px; font-size: 10px; letter-spacing: 2px; margin-bottom: 20px; }
+  .plan-name { font-family: 'Exo 2', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+  .plan-price { font-family: 'Exo 2', sans-serif; font-size: 72px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+  .plan.lit .plan-price { background: linear-gradient(135deg, var(--blue), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .plan-per { font-size: 13px; color: var(--grey); margin-bottom: 32px; }
+  .plan-line { height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 28px; }
+  .plan-feats { list-style: none; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+  .plan-feats li { font-size: 14px; color: var(--grey); display: flex; gap: 10px; }
+  .plan-feats li::before { content: '›'; color: var(--blue); font-size: 18px; line-height: 1.2; flex-shrink: 0; }
+  .plan-btn { margin-top: 32px; padding: 14px; background: transparent; border: 1px solid rgba(0,102,255,0.3); color: var(--white); font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+  .plan-btn:hover { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 20px var(--blue-glow); }
+  .plan.lit .plan-btn { background: var(--blue); border-color: var(--blue); }
+
+  /* CONTACT */
+  .contact { padding: 100px 60px; background: var(--dark); border-top: 1px solid rgba(0,102,255,0.1); }
+  .contact-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.3fr; gap: 80px; }
+  .contact-tag { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); margin-bottom: 24px; display: block; }
+  .contact-left h2 { font-family: 'Exo 2', sans-serif; font-size: clamp(40px, 5vw, 68px); font-weight: 900; line-height: 0.95; margin-bottom: 40px; }
+  .contact-left h2 .blue { color: var(--blue); }
+  .contact-info { display: flex; flex-direction: column; gap: 24px; }
+  .contact-info-row { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .contact-info-row:last-child { border-bottom: none; }
+  .info-icon { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(0,102,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .info-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); display: block; margin-bottom: 4px; }
+  .info-val { font-size: 13px; color: var(--grey); line-height: 1.6; }
+  .contact-form { background: var(--panel); border: 1px solid rgba(0,102,255,0.15); border-radius: 16px; padding: 48px; display: flex; flex-direction: column; gap: 20px; }
+  .contact-form h3 { font-family: 'Exo 2', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .contact-form h3 span { color: var(--blue); }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); }
+  .form-group input, .form-group select, .form-group textarea { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--white); padding: 14px 18px; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; border-radius: 8px; transition: border-color 0.2s; -webkit-appearance: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
+  .form-group select option { background: var(--panel); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-submit { background: var(--blue); color: var(--white); padding: 16px; border: none; font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 2px; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+  .form-submit:hover { background: var(--blue-bright); box-shadow: 0 0 30px var(--blue-glow); }
+
+  /* FOOTER */
+  footer { background: var(--black); border-top: 1px solid rgba(0,102,255,0.1); padding: 44px 60px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Exo 2', sans-serif; font-size: 28px; font-weight: 900; background: linear-gradient(90deg, var(--blue), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 4px; }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a { color: var(--grey); text-decoration: none; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--cyan); }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.15); }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-content, .features, .pricing, .contact { padding: 60px 24px; }
+    .features-head { flex-direction: column; gap: 20px; }
+    .features-head p { text-align: left; max-width: 100%; }
+    .features-grid, .plans, .contact-inner { grid-template-columns: 1fr; }
+    .hero-stats-row { flex-wrap: wrap; }
+    footer { flex-direction: column; gap: 20px; text-align: center; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">PULSE</div>
+  <ul class="nav-links">
+    <li><a href="#features">Programs</a></li>
+    <li><a href="#pricing">Membership</a></li>
+    <li><a href="#contact">Join</a></li>
+  </ul>
+  <button class="nav-cta">RIDE FREE →</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow-orb"></div>
+  <div class="hero-glow-orb2"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-pill">
+      <div class="hero-pill-dot"></div>
+      <span class="hero-pill-text">Now booking — Spring Classes</span>
+    </div>
+    <h1 class="hero-title">
+      RIDE.<br>
+      <span class="outline">PUSH.</span><br>
+      <span class="blue">TRANSCEND.</span>
+    </h1>
+    <p class="hero-desc">Pulse is more than a cycling studio. It's 45 minutes of darkness, bass, and sweat — where your only competition is the person you were yesterday.</p>
+    <div class="hero-ctas">
+      <a href="#pricing" class="cta-blue">BOOK A CLASS</a>
+      <a href="#features" class="cta-outline">OUR PROGRAMS</a>
+    </div>
+    <div class="hero-stats-row">
+      <div class="hero-stat"><div class="stat-num">50</div><div class="stat-label">Bikes per Studio</div></div>
+      <div class="hero-stat"><div class="stat-num">70+</div><div class="stat-label">Classes/Week</div></div>
+      <div class="hero-stat"><div class="stat-num">5K+</div><div class="stat-label">Active Riders</div></div>
+      <div class="hero-stat"><div class="stat-num">4</div><div class="stat-label">NYC Locations</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="features-head">
+    <div>
+      <span class="feat-tag">Programs</span>
+      <h2>RIDE YOUR<br><span class="blue">WAY</span></h2>
+    </div>
+    <p>Every class is different. Every class is unforgettable. Choose the format that matches your energy.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-meter">🎵</div>
+      <h3>Rhythm Ride</h3>
+      <p>Move to the beat. Our signature class syncs every push, jump, and sprint to a curated playlist. Pure flow state.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-meter">💪</div>
+      <h3>Power Surge</h3>
+      <p>Interval-based training focused on metrics — watts, cadence, resistance. For riders who want to see the numbers move.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-meter">🌙</div>
+      <h3>Low Light</h3>
+      <p>Dark room. Loud music. No mirrors. This is the class where you forget everything and just ride. Fan favourite for a reason.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="pricing-head">
+    <span class="pricing-tag">Membership</span>
+    <h2>YOUR RIDE,<br><span class="blue">YOUR TERMS</span></h2>
+    <p>First class always free. No commitment required to start.</p>
+  </div>
+  <div class="plans">
+    <div class="plan">
+      <span class="plan-name">Starter Pack</span>
+      <div class="plan-price">$39</div>
+      <div class="plan-per">3 classes · never expires</div>
+      <div class="plan-line"></div>
+      <ul class="plan-feats">
+        <li>3 rides, use anytime</li>
+        <li>All class formats</li>
+        <li>Shoe rental included</li>
+        <li>App & leaderboard</li>
+      </ul>
+      <button class="plan-btn">CHOOSE STARTER</button>
+    </div>
+    <div class="plan lit">
+      <div class="plan-badge">MOST POPULAR</div>
+      <span class="plan-name">Unlimited Monthly</span>
+      <div class="plan-price">$149</div>
+      <div class="plan-per">per month · cancel anytime</div>
+      <div class="plan-line"></div>
+      <ul class="plan-feats">
+        <li>Unlimited rides</li>
+        <li>Priority booking 24hrs early</li>
+        <li>Shoe rental included</li>
+        <li>Full metrics tracking</li>
+        <li>1 guest ride / month</li>
+      </ul>
+      <button class="plan-btn">START RIDING</button>
+    </div>
+    <div class="plan">
+      <span class="plan-name">10-Class Pack</span>
+      <div class="plan-price">$180</div>
+      <div class="plan-per">use within 90 days</div>
+      <div class="plan-line"></div>
+      <ul class="plan-feats">
+        <li>10 rides pre-paid</li>
+        <li>All class formats</li>
+        <li>Shoe rental included</li>
+        <li>Full app access</li>
+        <li>Shareable with friends</li>
+      </ul>
+      <button class="plan-btn">BUY PACK</button>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div>
+      <span class="contact-tag">Find Us</span>
+      <h2>READY TO<br><span class="blue">RIDE?</span></h2>
+      <div class="contact-info">
+        <div class="contact-info-row">
+          <div class="info-icon">📍</div>
+          <div><span class="info-label">HQ Location</span><span class="info-val">110 Electric Ave, Midtown<br>New York, NY 10036</span></div>
+        </div>
+        <div class="contact-info-row">
+          <div class="info-icon">⏰</div>
+          <div><span class="info-label">Studio Hours</span><span class="info-val">Mon–Fri: 5:30am – 10:00pm<br>Sat–Sun: 7:00am – 8:00pm</span></div>
+        </div>
+        <div class="contact-info-row">
+          <div class="info-icon">📞</div>
+          <div><span class="info-label">Contact</span><span class="info-val">ride@pulsecycling.com<br>+1 (212) 555-0155</span></div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="return false">
+      <h3>Book Your <span>Free Ride</span></h3>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Jordan"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Rivera"></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" placeholder="+1 (000) 000-0000"></div>
+      <div class="form-group">
+        <label>Class Format</label>
+        <select><option>Rhythm Ride</option><option>Power Surge</option><option>Low Light</option><option>Surprise me!</option></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Preferred Date</label><input type="date"></div>
+        <div class="form-group"><label>Preferred Time</label><select><option>6:00 AM</option><option>7:00 AM</option><option>12:00 PM</option><option>6:00 PM</option><option>7:30 PM</option></select></div>
+      </div>
+      <button class="form-submit">CLAIM FREE RIDE →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">PULSE</div>
+  <div class="footer-links">
+    <a href="#">Schedule</a><a href="#">Locations</a><a href="#">Instructors</a><a href="#">App</a>
+  </div>
+  <p class="footer-copy">© 2024 Pulse Cycling Studio</p>
+</footer>
+</body>
+</html>

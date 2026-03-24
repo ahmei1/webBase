@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hem Property | Find Your Place</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,200;0,400;0,700;1,200;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --white: #fafaf8;
+    --off-white: #f2f0eb;
+    --forest: #2d4a35;
+    --forest-light: #3d6147;
+    --forest-pale: rgba(45,74,53,0.08);
+    --ink: #1a1c18;
+    --muted: #7a7d76;
+    --border: #e2e0da;
+    --warm: #c8b89a;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--white); color:var(--ink); font-family:'DM Sans', sans-serif; font-weight:300; overflow-x:hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.2rem 3rem;
+    background:rgba(250,250,248,0.92); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-logo {
+    font-family:'Fraunces', serif; font-size:1.4rem; font-weight:700;
+    color:var(--forest); letter-spacing:-0.02em;
+  }
+  .nav-logo span { font-weight:200; font-style:italic; color:var(--muted); }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a {
+    font-size:0.82rem; color:var(--muted); text-decoration:none;
+    transition:color 0.2s; font-weight:400;
+  }
+  .nav-links a:hover { color:var(--forest); }
+  .nav-pill {
+    background:var(--forest); color:var(--white);
+    font-size:0.78rem; padding:0.55rem 1.4rem; border-radius:100px;
+    border:none; cursor:pointer; font-family:'DM Sans', sans-serif;
+    font-weight:500; transition:background 0.2s;
+  }
+  .nav-pill:hover { background:var(--forest-light); }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .hamburger span { display:block; width:22px; height:1.5px; background:var(--ink); border-radius:2px; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height:100vh; padding-top:5rem;
+    display:flex; flex-direction:column;
+    background:var(--white);
+  }
+  .hero-top {
+    flex:1; display:grid; grid-template-columns:1fr 1fr;
+    padding:4rem 3rem 3rem;
+    gap:4rem; align-items:center;
+  }
+  .hero-tag {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-size:0.72rem; color:var(--forest);
+    background:var(--forest-pale); padding:0.35rem 0.9rem; border-radius:100px;
+    margin-bottom:2rem; font-weight:500;
+  }
+  .hero-tag::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--forest); }
+  .hero-title {
+    font-family:'Fraunces', serif;
+    font-size:clamp(2.8rem, 5vw, 4.8rem);
+    font-weight:200; line-height:1.08; letter-spacing:-0.03em;
+    margin-bottom:1.5rem; color:var(--ink);
+  }
+  .hero-title em { font-style:italic; color:var(--forest); }
+  .hero-sub {
+    font-size:0.9rem; line-height:1.8; color:var(--muted);
+    max-width:400px; margin-bottom:2.5rem;
+  }
+  .search-bar {
+    display:flex; align-items:center;
+    background:var(--white); border:1.5px solid var(--border);
+    border-radius:12px; overflow:hidden;
+    box-shadow:0 4px 24px rgba(45,74,53,0.08);
+    max-width:500px;
+  }
+  .search-input {
+    flex:1; padding:1rem 1.2rem; border:none; outline:none;
+    font-size:0.88rem; font-family:'DM Sans', sans-serif;
+    color:var(--ink); background:transparent;
+  }
+  .search-select {
+    border:none; border-left:1px solid var(--border);
+    padding:1rem 1rem; font-size:0.82rem;
+    font-family:'DM Sans', sans-serif; color:var(--muted);
+    background:var(--off-white); outline:none; cursor:pointer;
+  }
+  .search-btn {
+    background:var(--forest); color:var(--white);
+    border:none; padding:1rem 1.4rem; cursor:pointer;
+    font-size:0.82rem; font-family:'DM Sans', sans-serif;
+    font-weight:500; transition:background 0.2s; white-space:nowrap;
+  }
+  .search-btn:hover { background:var(--forest-light); }
+  .hero-stats {
+    display:flex; gap:2.5rem; margin-top:2.5rem;
+    padding-top:2rem; border-top:1px solid var(--border);
+  }
+  .stat { display:flex; flex-direction:column; }
+  .stat-n {
+    font-family:'Fraunces', serif;
+    font-size:1.8rem; font-weight:700; color:var(--forest);
+    line-height:1;
+  }
+  .stat-l { font-size:0.72rem; color:var(--muted); margin-top:0.2rem; }
+  .hero-visual { position:relative; }
+  .hero-img-wrap {
+    border-radius:16px; overflow:hidden;
+    aspect-ratio:4/5;
+    position:relative;
+  }
+  .hero-img-wrap img {
+    width:100%; height:100%; object-fit:cover;
+    transition:transform 0.8s ease;
+  }
+  .hero-img-wrap:hover img { transform:scale(1.04); }
+  .hero-chip {
+    position:absolute; bottom:1.5rem; left:1.5rem;
+    background:var(--white); border-radius:12px;
+    padding:1rem 1.2rem;
+    box-shadow:0 8px 32px rgba(26,28,24,0.12);
+    display:flex; flex-direction:column; gap:0.2rem;
+    min-width:180px;
+  }
+  .chip-price {
+    font-family:'Fraunces', serif; font-size:1.3rem;
+    font-weight:700; color:var(--forest);
+  }
+  .chip-loc { font-size:0.72rem; color:var(--muted); }
+  .chip-tag {
+    font-size:0.65rem; background:var(--forest-pale);
+    color:var(--forest); padding:0.2rem 0.6rem;
+    border-radius:100px; width:fit-content; font-weight:500;
+  }
+  .hero-chip2 {
+    position:absolute; top:1.5rem; right:1.5rem;
+    background:var(--forest); border-radius:12px;
+    padding:0.8rem 1rem; color:var(--white);
+    font-size:0.72rem;
+  }
+  .chip2-num {
+    font-family:'Fraunces', serif; font-size:1.4rem; font-weight:700;
+  }
+
+  /* ── FILTER TABS ── */
+  .filter-bar {
+    background:var(--off-white); padding:1.5rem 3rem;
+    display:flex; gap:0.6rem; border-top:1px solid var(--border);
+    overflow-x:auto; scrollbar-width:none; flex-wrap:wrap;
+  }
+  .filter-tab {
+    padding:0.5rem 1.2rem; border-radius:100px;
+    border:1.5px solid var(--border); background:var(--white);
+    font-size:0.78rem; color:var(--muted); cursor:pointer;
+    white-space:nowrap; transition:all 0.2s; font-family:'DM Sans', sans-serif;
+  }
+  .filter-tab.active, .filter-tab:hover {
+    background:var(--forest); color:var(--white); border-color:var(--forest);
+  }
+
+  /* ── PROPERTIES ── */
+  .properties { padding:5rem 3rem; }
+  .sec-header {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem;
+  }
+  .sec-title {
+    font-family:'Fraunces', serif; font-size:clamp(1.8rem, 3vw, 2.5rem);
+    font-weight:200; letter-spacing:-0.02em;
+  }
+  .sec-title em { font-style:italic; color:var(--forest); }
+  .sec-link {
+    font-size:0.8rem; color:var(--forest); text-decoration:none;
+    display:flex; align-items:center; gap:0.4rem; font-weight:500;
+    border-bottom:1px solid var(--forest); padding-bottom:1px;
+    transition:gap 0.2s;
+  }
+  .sec-link:hover { gap:0.8rem; }
+  .prop-grid {
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem;
+  }
+  .prop-card {
+    border-radius:14px; overflow:hidden;
+    background:var(--white); border:1px solid var(--border);
+    transition:transform 0.3s, box-shadow 0.3s; cursor:pointer;
+  }
+  .prop-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(45,74,53,0.12); }
+  .prop-img { position:relative; aspect-ratio:4/3; overflow:hidden; }
+  .prop-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+  .prop-card:hover .prop-img img { transform:scale(1.06); }
+  .prop-badge {
+    position:absolute; top:1rem; left:1rem;
+    background:var(--forest); color:var(--white);
+    font-size:0.62rem; padding:0.3rem 0.7rem; border-radius:100px; font-weight:500;
+  }
+  .prop-badge.sale { background:var(--warm); color:var(--ink); }
+  .prop-save {
+    position:absolute; top:1rem; right:1rem;
+    background:var(--white); width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.9rem; cursor:pointer; border:none;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    transition:transform 0.2s;
+  }
+  .prop-save:hover { transform:scale(1.1); }
+  .prop-body { padding:1.2rem; }
+  .prop-price {
+    font-family:'Fraunces', serif; font-size:1.4rem;
+    font-weight:700; color:var(--forest); margin-bottom:0.3rem;
+  }
+  .prop-name { font-size:0.88rem; font-weight:500; color:var(--ink); margin-bottom:0.2rem; }
+  .prop-loc { font-size:0.78rem; color:var(--muted); margin-bottom:0.8rem; }
+  .prop-specs {
+    display:flex; gap:1rem; padding-top:0.8rem;
+    border-top:1px solid var(--border); font-size:0.72rem; color:var(--muted);
+  }
+  .spec { display:flex; align-items:center; gap:0.3rem; }
+
+  /* ── HOW IT WORKS ── */
+  .how { background:var(--off-white); padding:6rem 3rem; }
+  .steps-grid {
+    display:grid; grid-template-columns:repeat(4, 1fr);
+    gap:2rem; margin-top:3rem;
+  }
+  .step { display:flex; flex-direction:column; gap:1rem; }
+  .step-num {
+    font-family:'Fraunces', serif; font-size:3rem; font-weight:200;
+    color:var(--forest); line-height:1; opacity:0.4;
+  }
+  .step-icon {
+    width:48px; height:48px; border-radius:12px;
+    background:var(--forest); display:flex; align-items:center; justify-content:center;
+    font-size:1.2rem;
+  }
+  .step-title { font-family:'Fraunces', serif; font-size:1.1rem; font-weight:400; }
+  .step-desc { font-size:0.78rem; color:var(--muted); line-height:1.8; }
+
+  /* ── PRICING ── */
+  .pricing { padding:6rem 3rem; }
+  .pricing-grid {
+    display:grid; grid-template-columns:repeat(3, 1fr);
+    gap:1.5rem; margin-top:3rem;
+  }
+  .price-card {
+    border-radius:14px; padding:2.5rem 2rem;
+    border:1.5px solid var(--border); background:var(--white);
+    transition:all 0.3s; position:relative; overflow:hidden;
+  }
+  .price-card:hover { border-color:var(--forest); transform:translateY(-4px); }
+  .price-card.popular {
+    background:var(--forest); color:var(--white);
+    border-color:var(--forest);
+  }
+  .popular-tag {
+    display:inline-block; background:rgba(255,255,255,0.2);
+    color:var(--white); font-size:0.62rem; padding:0.25rem 0.7rem;
+    border-radius:100px; margin-bottom:1rem; font-weight:500;
+  }
+  .price-plan { font-size:0.78rem; color:var(--muted); margin-bottom:0.3rem; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; }
+  .price-card.popular .price-plan { color:rgba(255,255,255,0.6); }
+  .price-amount {
+    font-family:'Fraunces', serif; font-size:2.8rem;
+    font-weight:700; color:var(--forest); line-height:1; margin-bottom:0.2rem;
+  }
+  .price-card.popular .price-amount { color:var(--white); }
+  .price-period { font-size:0.75rem; color:var(--muted); margin-bottom:2rem; }
+  .price-card.popular .price-period { color:rgba(255,255,255,0.55); }
+  .price-features { list-style:none; margin-bottom:2rem; }
+  .price-features li {
+    font-size:0.78rem; padding:0.55rem 0;
+    border-bottom:1px solid rgba(0,0,0,0.06);
+    display:flex; gap:0.6rem; align-items:center;
+    color:var(--muted);
+  }
+  .price-card.popular .price-features li { border-color:rgba(255,255,255,0.1); color:rgba(255,255,255,0.8); }
+  .price-features li::before { content:'✓'; color:var(--forest); font-weight:600; font-size:0.7rem; flex-shrink:0; }
+  .price-card.popular .price-features li::before { color:rgba(255,255,255,0.8); }
+  .price-btn {
+    width:100%; padding:0.9rem; border-radius:10px;
+    font-size:0.82rem; font-family:'DM Sans', sans-serif;
+    font-weight:500; cursor:pointer; transition:all 0.2s;
+    border:1.5px solid var(--forest); background:transparent;
+    color:var(--forest);
+  }
+  .price-btn:hover { background:var(--forest); color:var(--white); }
+  .price-card.popular .price-btn { background:var(--white); color:var(--forest); border-color:var(--white); }
+  .price-card.popular .price-btn:hover { background:rgba(255,255,255,0.85); }
+
+  /* ── CONTACT ── */
+  .contact { background:var(--forest); padding:7rem 3rem; color:var(--white); }
+  .contact-wrap {
+    max-width:700px; margin:0 auto; text-align:center;
+  }
+  .contact-title {
+    font-family:'Fraunces', serif; font-size:clamp(2rem, 4vw, 3.5rem);
+    font-weight:200; letter-spacing:-0.02em; margin-bottom:1.5rem;
+  }
+  .contact-title em { font-style:italic; }
+  .contact-sub { font-size:0.88rem; color:rgba(255,255,255,0.65); line-height:1.8; margin-bottom:3rem; }
+  .contact-form {
+    display:grid; grid-template-columns:1fr 1fr; gap:1rem;
+    text-align:left;
+  }
+  .cf-group { display:flex; flex-direction:column; gap:0.4rem; }
+  .cf-group.full { grid-column:span 2; }
+  .cf-group label { font-size:0.7rem; color:rgba(255,255,255,0.5); letter-spacing:0.08em; }
+  .cf-group input, .cf-group textarea, .cf-group select {
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
+    border-radius:8px; padding:0.8rem 1rem;
+    color:var(--white); font-family:'DM Sans', sans-serif;
+    font-size:0.85rem; outline:none; transition:border-color 0.2s;
+  }
+  .cf-group input:focus, .cf-group textarea:focus { border-color:rgba(255,255,255,0.5); }
+  .cf-group textarea { resize:none; height:80px; }
+  .cf-group select option { background:var(--forest); }
+  .contact-submit {
+    grid-column:span 2; margin-top:0.5rem;
+    background:var(--white); color:var(--forest);
+    border:none; border-radius:10px; padding:1rem;
+    font-size:0.88rem; font-weight:500; font-family:'DM Sans', sans-serif;
+    cursor:pointer; transition:opacity 0.2s;
+  }
+  .contact-submit:hover { opacity:0.9; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--ink); color:rgba(255,255,255,0.35);
+    padding:2rem 3rem;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:1rem;
+  }
+  .footer-logo { font-family:'Fraunces', serif; font-size:1.1rem; color:var(--white); }
+  footer a { color:rgba(255,255,255,0.35); text-decoration:none; font-size:0.75rem; transition:color 0.2s; }
+  footer a:hover { color:var(--white); }
+  .footer-links { display:flex; gap:2rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width:1024px) {
+    .hero-top { grid-template-columns:1fr; padding:3rem 1.5rem 2rem; }
+    .hero-visual { display:none; }
+    .steps-grid { grid-template-columns:repeat(2,1fr); }
+    .prop-grid { grid-template-columns:repeat(2,1fr); }
+    .pricing-grid { grid-template-columns:1fr; max-width:400px; }
+  }
+  @media (max-width:768px) {
+    nav { padding:1rem 1.5rem; }
+    .nav-links, .nav-pill { display:none; }
+    .hamburger { display:flex; }
+    .filter-bar { padding:1rem 1.5rem; }
+    .properties, .how, .pricing, .contact { padding:4rem 1.5rem; }
+    .prop-grid { grid-template-columns:1fr; }
+    .steps-grid { grid-template-columns:1fr; }
+    .contact-form { grid-template-columns:1fr; }
+    .cf-group.full, .contact-submit { grid-column:auto; }
+    footer { padding:1.5rem; flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Hem <span>property</span></div>
+  <ul class="nav-links">
+    <li><a href="#listings">Listings</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-pill">List Your Property</button>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <div>
+      <div class="hero-tag">1,240 active listings across Scandinavia</div>
+      <h1 class="hero-title">Find a Home<br>That Feels <em>Like You.</em></h1>
+      <p class="hero-sub">Hem connects you with thoughtfully curated properties in the most livable cities across Scandinavia. Simple, honest, and refreshingly human.</p>
+      <div class="search-bar">
+        <input class="search-input" type="text" placeholder="Search by city, neighbourhood…"/>
+        <select class="search-select">
+          <option>Buy</option>
+          <option>Rent</option>
+        </select>
+        <button class="search-btn">Search →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-n">1.2K+</span><span class="stat-l">Active Listings</span></div>
+        <div class="stat"><span class="stat-n">98%</span><span class="stat-l">Client Satisfaction</span></div>
+        <div class="stat"><span class="stat-n">12yr</span><span class="stat-l">Market Expertise</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-wrap">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80" alt="Modern home"/>
+        <div class="hero-chip">
+          <span class="chip-tag">Just listed</span>
+          <span class="chip-price">kr 4,850,000</span>
+          <span class="chip-loc">Östermalm, Stockholm</span>
+        </div>
+        <div class="hero-chip2">
+          <div class="chip2-num">24</div>
+          <div style="font-size:0.65rem;opacity:0.7;">viewings this week</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-tab active" onclick="setFilter(this)">All Properties</button>
+    <button class="filter-tab" onclick="setFilter(this)">Apartments</button>
+    <button class="filter-tab" onclick="setFilter(this)">Houses</button>
+    <button class="filter-tab" onclick="setFilter(this)">Villas</button>
+    <button class="filter-tab" onclick="setFilter(this)">Countryside</button>
+    <button class="filter-tab" onclick="setFilter(this)">New Development</button>
+    <button class="filter-tab" onclick="setFilter(this)">Waterfront</button>
+  </div>
+</div>
+
+<!-- LISTINGS -->
+<section class="properties" id="listings">
+  <div class="sec-header">
+    <h2 class="sec-title">Featured <em>Listings</em></h2>
+    <a href="#" class="sec-link">View all 1,240 →</a>
+  </div>
+  <div class="prop-grid">
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=700&q=80" alt="Property"/>
+        <span class="prop-badge">For Sale</span>
+        <button class="prop-save">♡</button>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">kr 5,200,000</div>
+        <div class="prop-name">Bright Corner Apartment</div>
+        <div class="prop-loc">📍 Södermalm, Stockholm</div>
+        <div class="prop-specs">
+          <span class="spec">🛏 3 bed</span>
+          <span class="spec">🚿 2 bath</span>
+          <span class="spec">📐 102 m²</span>
+        </div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=700&q=80" alt="Property"/>
+        <span class="prop-badge sale">New Build</span>
+        <button class="prop-save">♡</button>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">kr 8,450,000</div>
+        <div class="prop-name">Architect Family Home</div>
+        <div class="prop-loc">📍 Djursholm, Stockholm</div>
+        <div class="prop-specs">
+          <span class="spec">🛏 5 bed</span>
+          <span class="spec">🚿 3 bath</span>
+          <span class="spec">📐 218 m²</span>
+        </div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1599427303058-f04cbcf4756f?w=700&q=80" alt="Property"/>
+        <span class="prop-badge">For Rent</span>
+        <button class="prop-save">♡</button>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">kr 18,500 /mo</div>
+        <div class="prop-name">Waterfront Studio Loft</div>
+        <div class="prop-loc">📍 Aker Brygge, Oslo</div>
+        <div class="prop-specs">
+          <span class="spec">🛏 1 bed</span>
+          <span class="spec">🚿 1 bath</span>
+          <span class="spec">📐 58 m²</span>
+        </div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=700&q=80" alt="Property"/>
+        <span class="prop-badge">For Sale</span>
+        <button class="prop-save">♡</button>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">kr 3,750,000</div>
+        <div class="prop-name">Classic Copenhagen Flat</div>
+        <div class="prop-loc">📍 Frederiksberg, Copenhagen</div>
+        <div class="prop-specs">
+          <span class="spec">🛏 2 bed</span>
+          <span class="spec">🚿 1 bath</span>
+          <span class="spec">📐 78 m²</span>
+        </div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=700&q=80" alt="Property"/>
+        <span class="prop-badge sale">Reduced</span>
+        <button class="prop-save">♡</button>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">kr 6,900,000</div>
+        <div class="prop-name">Countryside Retreat Villa</div>
+        <div class="prop-loc">📍 Dalarna, Sweden</div>
+        <div class="prop-specs">
+          <span class="spec">🛏 4 bed</span>
+          <span class="spec">🚿 3 bath</span>
+          <span class="spec">📐 185 m²</span>
+        </div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Property"/>
+        <span class="prop-badge">For Rent</span>
+        <button class="prop-save">♡</button>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">kr 24,000 /mo</div>
+        <div class="prop-name">Executive Helsinki Penthouse</div>
+        <div class="prop-loc">📍 Kamppi, Helsinki</div>
+        <div class="prop-specs">
+          <span class="spec">🛏 4 bed</span>
+          <span class="spec">🚿 2 bath</span>
+          <span class="spec">📐 160 m²</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <h2 class="sec-title">How <em>Hem</em> Works</h2>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">🔍</div>
+      <div class="step-title">Search & Filter</div>
+      <p class="step-desc">Browse 1,200+ properties by city, price, size, and lifestyle preferences. Our smart filters surface exactly what matters to you.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">📅</div>
+      <div class="step-title">Book a Viewing</div>
+      <p class="step-desc">Book a live or virtual viewing in seconds directly through the platform. No waiting on callbacks or endless email chains.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">🤝</div>
+      <div class="step-title">Meet Your Advisor</div>
+      <p class="step-desc">A dedicated local property advisor guides you through every step — from offer to keys in hand.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-icon">🏠</div>
+      <div class="step-title">Move In</div>
+      <p class="step-desc">Paperwork, contracts, and handover — all handled seamlessly so you can focus on making it home.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="sec-header">
+    <h2 class="sec-title">Simple <em>Pricing</em></h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-plan">Basic</div>
+      <div class="price-amount">Free</div>
+      <div class="price-period">forever</div>
+      <ul class="price-features">
+        <li>Unlimited property search</li>
+        <li>Save up to 10 listings</li>
+        <li>Email alerts for new listings</li>
+        <li>Market reports (monthly)</li>
+      </ul>
+      <button class="price-btn">Get started free</button>
+    </div>
+    <div class="price-card popular">
+      <span class="popular-tag">Most popular</span>
+      <div class="price-plan">Pro</div>
+      <div class="price-amount">kr 199</div>
+      <div class="price-period">per month</div>
+      <ul class="price-features">
+        <li>Unlimited saved listings</li>
+        <li>Instant listing alerts</li>
+        <li>Priority viewing booking</li>
+        <li>Dedicated advisor</li>
+        <li>Mortgage calculator & advice</li>
+      </ul>
+      <button class="price-btn">Start Pro</button>
+    </div>
+    <div class="price-card">
+      <div class="price-plan">Agency</div>
+      <div class="price-amount">kr 999</div>
+      <div class="price-period">per month</div>
+      <ul class="price-features">
+        <li>Everything in Pro</li>
+        <li>Full agency dashboard</li>
+        <li>Unlimited listings</li>
+        <li>Analytics & lead management</li>
+        <li>API access</li>
+      </ul>
+      <button class="price-btn">Start Agency</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-wrap">
+    <h2 class="contact-title">Let's Find Your<br><em>Perfect Home</em></h2>
+    <p class="contact-sub">Tell us what you're looking for and a local Hem advisor will reach out within 24 hours with a tailored shortlist.</p>
+    <form class="contact-form" onsubmit="return false;">
+      <div class="cf-group"><label>First name</label><input type="text" placeholder="Anna"/></div>
+      <div class="cf-group"><label>Last name</label><input type="text" placeholder="Lindqvist"/></div>
+      <div class="cf-group"><label>Email</label><input type="email" placeholder="anna@example.com"/></div>
+      <div class="cf-group"><label>Phone</label><input type="tel" placeholder="+46 70 000 00 00"/></div>
+      <div class="cf-group"><label>Preferred city</label>
+        <select><option>Stockholm</option><option>Oslo</option><option>Copenhagen</option><option>Helsinki</option><option>Other</option></select>
+      </div>
+      <div class="cf-group"><label>Budget</label>
+        <select><option>Under kr 2M</option><option>kr 2M–5M</option><option>kr 5M–10M</option><option>kr 10M+</option></select>
+      </div>
+      <div class="cf-group full"><label>Anything else?</label><textarea placeholder="Tell us your must-haves…"></textarea></div>
+      <button class="contact-submit">Send My Requirements →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Hem Property</div>
+  <div class="footer-links">
+    <a href="#">Listings</a>
+    <a href="#">About</a>
+    <a href="#">Careers</a>
+    <a href="#">Privacy</a>
+  </div>
+  <div>© 2025 Hem Property AB. All rights reserved.</div>
+</footer>
+
+<script>
+  function setFilter(el) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

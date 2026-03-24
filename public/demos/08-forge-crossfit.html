@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forge — CrossFit & Boxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #141414;
+    --darker: #0d0d0d;
+    --steel: #2a2a2a;
+    --orange: #ff5e00;
+    --orange-dim: rgba(255,94,0,0.15);
+    --white: #f0eeea;
+    --grey: #888888;
+    --light-grey: #3a3a3a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--darker); color: var(--white); font-family: 'IBM Plex Mono', monospace; font-weight: 300; overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 0 60px; height: 68px; display: flex; align-items: center; justify-content: space-between; background: var(--darker); border-bottom: 1px solid var(--steel); }
+  .nav-logo { font-family: 'Anton', sans-serif; font-size: 34px; letter-spacing: 6px; color: var(--white); }
+  .nav-logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a { color: var(--grey); text-decoration: none; font-size: 11px; letter-spacing: 3px; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-cta { background: var(--orange); color: var(--white); padding: 10px 28px; border: none; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 3px; cursor: pointer; transition: background 0.2s; }
+  .nav-cta:hover { background: #e05500; }
+
+  /* HERO */
+  .hero { padding-top: 68px; min-height: 100vh; display: grid; grid-template-columns: 1.2fr 0.8fr; }
+  .hero-left { background: var(--dark); padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--steel); position: relative; overflow: hidden; }
+  .hero-left::before { content: ''; position: absolute; bottom: -200px; left: -200px; width: 600px; height: 600px; border-radius: 50%; background: var(--orange-dim); pointer-events: none; }
+  .hero-tag { font-size: 10px; letter-spacing: 5px; color: var(--orange); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+  .hero-tag::before { content: '//'; color: var(--orange); }
+  .hero-title { font-family: 'Anton', sans-serif; font-size: clamp(80px, 12vw, 160px); line-height: 0.85; letter-spacing: 2px; margin-bottom: 36px; position: relative; z-index: 1; }
+  .hero-title .stroke { -webkit-text-stroke: 2px var(--white); color: transparent; }
+  .hero-title .orange { color: var(--orange); }
+  .hero-desc { font-size: 14px; color: var(--grey); line-height: 1.9; max-width: 420px; margin-bottom: 48px; position: relative; z-index: 1; }
+  .hero-ctas { display: flex; gap: 16px; position: relative; z-index: 1; }
+  .cta-orange { background: var(--orange); color: var(--white); padding: 16px 44px; border: none; font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 3px; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; }
+  .cta-orange:hover { background: #e05500; }
+  .cta-wire { background: transparent; color: var(--white); padding: 16px 44px; border: 1px solid var(--steel); font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 3px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .cta-wire:hover { border-color: var(--orange); color: var(--orange); }
+  .hero-right { background: var(--steel); display: flex; flex-direction: column; }
+  .hero-right-top { flex: 1; padding: 60px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,94,0,0.2); font-family: 'Anton', sans-serif; font-size: 100px; color: rgba(255,94,0,0.08); letter-spacing: 4px; writing-mode: vertical-rl; text-orientation: mixed; }
+  .hero-right-stats { padding: 0; display: grid; grid-template-columns: 1fr 1fr; }
+  .hero-stat { padding: 32px; border-right: 1px solid var(--light-grey); border-top: 1px solid var(--light-grey); }
+  .hero-stat:nth-child(2) { border-right: none; }
+  .hero-stat:nth-child(3) { border-right: 1px solid var(--light-grey); border-bottom: none; }
+  .hero-stat:nth-child(4) { border-right: none; }
+  .stat-num { font-family: 'Anton', sans-serif; font-size: 44px; color: var(--orange); line-height: 1; }
+  .stat-label { font-size: 10px; letter-spacing: 3px; color: var(--grey); margin-top: 6px; }
+
+  /* FEATURES */
+  .features { padding: 100px 60px; background: var(--dark); border-top: 1px solid var(--steel); }
+  .feat-header { margin-bottom: 64px; }
+  .feat-tag { font-size: 10px; letter-spacing: 5px; color: var(--orange); margin-bottom: 20px; display: flex; gap: 12px; align-items: center; }
+  .feat-tag::before { content: '//'; }
+  .feat-header h2 { font-family: 'Anton', sans-serif; font-size: clamp(48px, 7vw, 96px); line-height: 0.9; letter-spacing: 2px; }
+  .feat-header h2 .stroke { -webkit-text-stroke: 2px var(--white); color: transparent; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--steel); }
+  .feat-card { background: var(--dark); padding: 48px 40px; transition: background 0.2s; }
+  .feat-card:hover { background: #1a1a1a; }
+  .feat-card-label { font-size: 10px; letter-spacing: 4px; color: var(--orange); margin-bottom: 16px; }
+  .feat-card h3 { font-family: 'Anton', sans-serif; font-size: 32px; letter-spacing: 2px; margin-bottom: 16px; }
+  .feat-card p { font-size: 13px; color: var(--grey); line-height: 1.9; }
+  .feat-highlight { background: var(--orange) !important; }
+  .feat-highlight .feat-card-label { color: rgba(255,255,255,0.6); }
+  .feat-highlight h3 { color: var(--white); }
+  .feat-highlight p { color: rgba(255,255,255,0.7); }
+
+  /* PRICING */
+  .pricing { padding: 100px 60px; background: var(--darker); border-top: 1px solid var(--steel); }
+  .pricing-tag { font-size: 10px; letter-spacing: 5px; color: var(--orange); margin-bottom: 20px; display: flex; gap: 12px; align-items: center; }
+  .pricing-tag::before { content: '//'; }
+  .pricing-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; }
+  .pricing-head h2 { font-family: 'Anton', sans-serif; font-size: clamp(48px, 6vw, 84px); line-height: 0.9; letter-spacing: 2px; }
+  .pricing-head h2 .orange { color: var(--orange); }
+  .pricing-head p { max-width: 280px; font-size: 13px; color: var(--grey); line-height: 1.8; text-align: right; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--steel); }
+  .plan { background: var(--dark); padding: 44px 36px; display: flex; flex-direction: column; transition: background 0.2s; }
+  .plan:hover { background: #1c1c1c; }
+  .plan.hot { background: var(--orange); }
+  .plan.hot:hover { background: #e05500; }
+  .plan-label { font-size: 10px; letter-spacing: 4px; color: var(--orange); margin-bottom: 12px; }
+  .plan.hot .plan-label { color: rgba(255,255,255,0.6); }
+  .plan-name { font-family: 'Anton', sans-serif; font-size: 28px; letter-spacing: 3px; margin-bottom: 24px; }
+  .plan-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+  .plan-price { font-family: 'Anton', sans-serif; font-size: 72px; line-height: 1; color: var(--orange); }
+  .plan.hot .plan-price { color: var(--white); }
+  .plan-per { font-size: 13px; color: var(--grey); }
+  .plan.hot .plan-per { color: rgba(255,255,255,0.6); }
+  .plan-divider { height: 1px; background: var(--steel); margin: 28px 0; }
+  .plan.hot .plan-divider { background: rgba(255,255,255,0.2); }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .plan-features li { font-size: 13px; color: var(--grey); display: flex; gap: 10px; }
+  .plan.hot .plan-features li { color: rgba(255,255,255,0.8); }
+  .plan-features li::before { content: '>'; color: var(--orange); font-weight: 400; }
+  .plan.hot .plan-features li::before { color: var(--white); }
+  .plan-btn { margin-top: 32px; padding: 14px; background: transparent; border: 1px solid var(--steel); color: var(--white); font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 3px; cursor: pointer; transition: all 0.2s; }
+  .plan-btn:hover { background: var(--orange); border-color: var(--orange); }
+  .plan.hot .plan-btn { background: var(--white); border-color: var(--white); color: var(--orange); }
+  .plan.hot .plan-btn:hover { background: var(--dark); color: var(--white); }
+
+  /* CONTACT */
+  .contact { padding: 100px 60px; background: var(--dark); border-top: 1px solid var(--steel); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1.3fr; gap: 80px; max-width: 1400px; margin: 0 auto; }
+  .contact-left-tag { font-size: 10px; letter-spacing: 5px; color: var(--orange); margin-bottom: 24px; display: flex; gap: 12px; align-items: center; }
+  .contact-left-tag::before { content: '//'; }
+  .contact-left h2 { font-family: 'Anton', sans-serif; font-size: clamp(48px, 6vw, 80px); line-height: 0.9; letter-spacing: 2px; margin-bottom: 48px; }
+  .contact-left h2 .orange { color: var(--orange); }
+  .contact-info { display: flex; flex-direction: column; gap: 24px; }
+  .contact-info-item { display: flex; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid var(--steel); }
+  .contact-info-item:last-child { border-bottom: none; }
+  .info-label { font-size: 10px; letter-spacing: 4px; color: var(--orange); display: block; margin-bottom: 6px; }
+  .info-val { font-size: 13px; color: var(--grey); line-height: 1.6; }
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-head { font-size: 10px; letter-spacing: 5px; color: var(--orange); display: flex; gap: 12px; align-items: center; }
+  .form-head::before { content: '//'; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 10px; letter-spacing: 4px; color: var(--grey); }
+  .form-group input, .form-group select, .form-group textarea { background: var(--steel); border: 1px solid var(--light-grey); color: var(--white); padding: 15px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--orange); }
+  .form-group select option { background: var(--steel); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-submit { background: var(--orange); color: var(--white); padding: 18px; border: none; font-family: 'Anton', sans-serif; font-size: 22px; letter-spacing: 4px; cursor: pointer; transition: background 0.2s; }
+  .form-submit:hover { background: #e05500; }
+
+  /* FOOTER */
+  footer { background: var(--darker); border-top: 1px solid var(--steel); padding: 44px 60px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Anton', sans-serif; font-size: 32px; letter-spacing: 6px; }
+  .footer-logo span { color: var(--orange); }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a { color: var(--grey); text-decoration: none; font-size: 11px; letter-spacing: 3px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--orange); }
+  .footer-copy { font-size: 11px; color: rgba(255,255,255,0.2); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left, .features, .pricing, .contact { padding: 60px 24px; }
+    .features-grid, .plans, .contact-inner { grid-template-columns: 1fr; }
+    .pricing-head { flex-direction: column; gap: 20px; }
+    .pricing-head p { text-align: left; max-width: 100%; }
+    footer { flex-direction: column; gap: 20px; text-align: center; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">F<span>O</span>RGE</div>
+  <ul class="nav-links">
+    <li><a href="#features">PROGRAMS</a></li>
+    <li><a href="#pricing">PLANS</a></li>
+    <li><a href="#contact">JOIN</a></li>
+  </ul>
+  <button class="nav-cta">FREE WEEK</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <span class="hero-tag">CrossFit & Boxing · Chicago</span>
+    <h1 class="hero-title"><span class="stroke">FORGED</span><br>IN<br><span class="orange">FIRE</span></h1>
+    <p class="hero-desc">This isn't a gym. It's a forge. The place where ordinary people are hammered, heated, and shaped into something stronger than they thought possible.</p>
+    <div class="hero-ctas">
+      <a href="#pricing" class="cta-orange">JOIN NOW</a>
+      <a href="#features" class="cta-wire">OUR PROGRAMS</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-top">FORGE</div>
+    <div class="hero-right-stats">
+      <div class="hero-stat"><div class="stat-num">5AM</div><div class="stat-label">First Class Daily</div></div>
+      <div class="hero-stat"><div class="stat-num">60+</div><div class="stat-label">Classes/Week</div></div>
+      <div class="hero-stat"><div class="stat-num">500+</div><div class="stat-label">Active Members</div></div>
+      <div class="hero-stat"><div class="stat-num">14</div><div class="stat-label">Expert Coaches</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="feat-header">
+    <div class="feat-tag">Programs</div>
+    <h2>WHAT<br><span class="stroke">WE BUILD</span></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card feat-highlight">
+      <div class="feat-card-label">// SIGNATURE</div>
+      <h3>FORGE CrossFit</h3>
+      <p>Our flagship program. Constantly varied functional movements performed at high intensity. Coached class every session, every day.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card-label">// STRIKING</div>
+      <h3>Boxing Fundamentals</h3>
+      <p>Learn to punch. Learn to move. Learn to defend. Whether for fitness or competition — this class will change how you see your body.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card-label">// STRENGTH</div>
+      <h3>Barbell Club</h3>
+      <p>Three days a week of structured Olympic lifting and powerlifting. Coached technique, progressive programming, real results.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="pricing-tag">Membership Plans</div>
+  <div class="pricing-head">
+    <h2>PICK YOUR<br><span class="orange">WEAPON</span></h2>
+    <p>No lock-in. Cancel anytime. First week always free for new members.</p>
+  </div>
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-label">// ENTRY</div>
+      <div class="plan-name">RECRUIT</div>
+      <div class="plan-price-row"><span class="plan-price">$59</span><span class="plan-per">/mo</span></div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>3 classes per week</li>
+        <li>CrossFit access</li>
+        <li>Open gym (off-peak)</li>
+        <li>App access</li>
+      </ul>
+      <button class="plan-btn">START FREE WEEK</button>
+    </div>
+    <div class="plan hot">
+      <div class="plan-label">// MOST POPULAR</div>
+      <div class="plan-name">OPERATOR</div>
+      <div class="plan-price-row"><span class="plan-price">$99</span><span class="plan-per">/mo</span></div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Unlimited classes</li>
+        <li>All programs included</li>
+        <li>Open gym (all hours)</li>
+        <li>Monthly check-in</li>
+        <li>2 guest passes/month</li>
+      </ul>
+      <button class="plan-btn">START FREE WEEK</button>
+    </div>
+    <div class="plan">
+      <div class="plan-label">// FULL ACCESS</div>
+      <div class="plan-name">ELITE</div>
+      <div class="plan-price-row"><span class="plan-price">$189</span><span class="plan-per">/mo</span></div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Everything in Operator</li>
+        <li>4 PT sessions/month</li>
+        <li>Custom programming</li>
+        <li>Competition prep</li>
+        <li>Recovery suite access</li>
+      </ul>
+      <button class="plan-btn">START FREE WEEK</button>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div>
+      <div class="contact-left-tag">Contact</div>
+      <h2>COME IN.<br>SWEAT.<br><span class="orange">REPEAT.</span></h2>
+      <div class="contact-info">
+        <div class="contact-info-item">
+          <div><span class="info-label">Location</span><span class="info-val">88 Iron Street, Pilsen, Chicago IL 60608</span></div>
+        </div>
+        <div class="contact-info-item">
+          <div><span class="info-label">Hours</span><span class="info-val">Mon–Fri: 5:00am – 10:00pm<br>Sat–Sun: 7:00am – 6:00pm</span></div>
+        </div>
+        <div class="contact-info-item">
+          <div><span class="info-label">Phone</span><span class="info-val">+1 (312) 555-0147</span></div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="return false">
+      <div class="form-head">Claim Your Free Week</div>
+      <div class="form-row">
+        <div class="form-group"><label>// FIRST NAME</label><input type="text" placeholder="RYAN"></div>
+        <div class="form-group"><label>// LAST NAME</label><input type="text" placeholder="CARTER"></div>
+      </div>
+      <div class="form-group"><label>// EMAIL</label><input type="email" placeholder="YOUR@EMAIL.COM"></div>
+      <div class="form-group"><label>// PHONE</label><input type="tel" placeholder="+1 (000) 000-0000"></div>
+      <div class="form-group">
+        <label>// INTERESTED IN</label>
+        <select>
+          <option>CrossFit</option>
+          <option>Boxing</option>
+          <option>Barbell Club</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="form-group"><label>// MESSAGE</label><textarea rows="3" placeholder="Questions, injuries, or goals..."></textarea></div>
+      <button class="form-submit">CLAIM FREE WEEK →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">F<span>O</span>RGE</div>
+  <div class="footer-links">
+    <a href="#">SCHEDULE</a><a href="#">COACHES</a><a href="#">STORE</a><a href="#">INSTAGRAM</a>
+  </div>
+  <p class="footer-copy">© 2024 FORGE FITNESS</p>
+</footer>
+</body>
+</html>

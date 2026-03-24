@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom — Women's Wellness Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Nunito:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lilac: #b09fd6;
+    --lilac-light: #d4c9ee;
+    --lilac-pale: #f0ecf9;
+    --gold: #c9a96e;
+    --gold-light: #e8d4a8;
+    --off-white: #fdf9f5;
+    --text: #2e2a3a;
+    --text-light: #8a7a9a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--off-white); color: var(--text); font-family: 'Nunito', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* NAV */
+  nav { padding: 24px 80px; display: flex; align-items: center; justify-content: space-between; background: var(--off-white); border-bottom: 1px solid rgba(176,159,214,0.2); position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'Marcellus', serif; font-size: 26px; letter-spacing: 3px; color: var(--lilac); }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a { color: var(--text-light); text-decoration: none; font-size: 13px; letter-spacing: 2px; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--lilac); }
+  .nav-btn { background: var(--lilac); color: var(--off-white); padding: 11px 32px; border: none; font-family: 'Nunito', sans-serif; font-size: 13px; letter-spacing: 2px; cursor: pointer; border-radius: 100px; transition: background 0.3s; }
+  .nav-btn:hover { background: #9680c2; }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+  .hero-left { padding: 100px 80px; display: flex; flex-direction: column; justify-content: center; background: var(--lilac-pale); position: relative; overflow: hidden; }
+  .hero-orb { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(176,159,214,0.25) 0%, transparent 70%); top: -100px; right: -200px; pointer-events: none; }
+  .hero-flower { font-size: 14px; letter-spacing: 6px; text-transform: uppercase; color: var(--lilac); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+  .hero-flower::before { content: '✦'; }
+  .hero-title { font-family: 'Marcellus', serif; font-size: clamp(48px, 6vw, 84px); line-height: 1.1; margin-bottom: 28px; color: var(--text); position: relative; z-index: 1; }
+  .hero-title em { font-style: italic; color: var(--lilac); }
+  .hero-desc { font-size: 16px; color: var(--text-light); line-height: 1.9; max-width: 420px; margin-bottom: 48px; position: relative; z-index: 1; }
+  .hero-actions { display: flex; gap: 20px; align-items: center; position: relative; z-index: 1; }
+  .btn-lilac { background: var(--lilac); color: var(--off-white); padding: 16px 44px; border: none; font-family: 'Nunito', sans-serif; font-size: 13px; letter-spacing: 2px; cursor: pointer; border-radius: 100px; transition: background 0.3s; text-decoration: none; display: inline-block; }
+  .btn-lilac:hover { background: #9680c2; }
+  .btn-text { color: var(--lilac); font-size: 13px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; text-decoration: none; transition: gap 0.3s; }
+  .btn-text:hover { gap: 14px; }
+  .btn-text::after { content: '→'; }
+  .hero-right { background: var(--lilac); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 80px 60px; }
+  .hero-right-deco { position: absolute; top: -60px; right: -60px; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.08); }
+  .hero-right-deco2 { position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; border-radius: 50%; background: rgba(0,0,0,0.05); }
+  .hero-big-word { font-family: 'Marcellus', serif; font-size: 80px; color: rgba(255,255,255,0.08); line-height: 1; position: absolute; bottom: 40px; right: 40px; }
+  .hero-cards { display: flex; flex-direction: column; gap: 16px; position: relative; z-index: 2; }
+  .hero-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.25); padding: 24px 28px; border-radius: 16px; }
+  .hero-card h4 { font-family: 'Marcellus', serif; font-size: 18px; color: var(--off-white); margin-bottom: 6px; }
+  .hero-card p { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .hero-card-time { font-size: 12px; color: var(--gold-light); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+  .hero-card-time::before { content: '●'; font-size: 8px; color: var(--gold); }
+  .hero-tagline { font-family: 'Marcellus', serif; font-size: 32px; color: var(--off-white); line-height: 1.2; position: relative; z-index: 2; }
+  .hero-tagline em { font-style: italic; color: var(--gold-light); }
+
+  /* ABOUT */
+  .about { padding: 120px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; max-width: 1400px; margin: 0 auto; }
+  .about-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .about-block { border-radius: 16px; padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 200px; }
+  .about-block:nth-child(1) { background: var(--lilac); grid-row: span 2; justify-content: center; align-items: center; text-align: center; }
+  .about-block:nth-child(2) { background: var(--gold-light); }
+  .about-block:nth-child(3) { background: var(--lilac-pale); border: 1px solid rgba(176,159,214,0.3); }
+  .about-block .block-num { font-family: 'Marcellus', serif; font-size: 52px; color: var(--off-white); line-height: 1; }
+  .about-block .block-label { font-size: 12px; letter-spacing: 2px; color: rgba(255,255,255,0.7); margin-top: 6px; }
+  .about-block:nth-child(1) .block-icon { font-size: 72px; margin-bottom: 16px; }
+  .about-block:nth-child(2) .block-num { color: var(--text); }
+  .about-block:nth-child(2) .block-label { color: var(--text-light); }
+  .about-block:nth-child(3) .block-num { color: var(--lilac); }
+  .about-block:nth-child(3) .block-label { color: var(--text-light); }
+  .about-text-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--lilac); margin-bottom: 24px; display: block; }
+  .about-text h2 { font-family: 'Marcellus', serif; font-size: clamp(32px, 4vw, 52px); line-height: 1.15; margin-bottom: 28px; }
+  .about-text h2 em { font-style: italic; color: var(--lilac); }
+  .about-text p { color: var(--text-light); line-height: 1.9; font-size: 15px; margin-bottom: 20px; }
+  .about-values { margin-top: 40px; display: flex; flex-direction: column; gap: 16px; }
+  .about-value { display: flex; gap: 16px; align-items: flex-start; }
+  .about-value-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); margin-top: 7px; flex-shrink: 0; }
+  .about-value-text h4 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .about-value-text p { font-size: 13px; color: var(--text-light); line-height: 1.6; }
+
+  /* FEATURES */
+  .features { background: var(--text); padding: 100px 80px; }
+  .feat-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--lilac-light); margin-bottom: 20px; display: block; }
+  .features-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; }
+  .features-head h2 { font-family: 'Marcellus', serif; font-size: clamp(32px, 4vw, 56px); color: var(--off-white); line-height: 1.1; }
+  .features-head h2 em { font-style: italic; color: var(--lilac-light); }
+  .features-head p { max-width: 280px; color: rgba(255,255,255,0.4); font-size: 14px; line-height: 1.8; text-align: right; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feat-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 44px 36px; transition: all 0.3s; }
+  .feat-card:hover { background: rgba(176,159,214,0.1); border-color: rgba(176,159,214,0.3); transform: translateY(-4px); }
+  .feat-icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(176,159,214,0.15); display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 24px; }
+  .feat-card h3 { font-family: 'Marcellus', serif; font-size: 22px; color: var(--off-white); font-weight: 400; margin-bottom: 14px; }
+  .feat-card p { font-size: 14px; color: rgba(255,255,255,0.4); line-height: 1.8; }
+
+  /* PRICING */
+  .pricing { padding: 100px 80px; background: var(--lilac-pale); }
+  .pricing-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--lilac); margin-bottom: 20px; display: block; }
+  .pricing-head { text-align: center; margin-bottom: 64px; }
+  .pricing-head h2 { font-family: 'Marcellus', serif; font-size: clamp(36px, 5vw, 64px); line-height: 1.05; }
+  .pricing-head h2 em { font-style: italic; color: var(--lilac); }
+  .pricing-head p { color: var(--text-light); font-size: 15px; margin-top: 14px; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .plan { background: var(--off-white); border-radius: 24px; padding: 44px 36px; display: flex; flex-direction: column; border: 1px solid rgba(176,159,214,0.2); transition: all 0.3s; position: relative; }
+  .plan:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(176,159,214,0.2); }
+  .plan.popular { background: var(--lilac); border-color: var(--lilac); }
+  .plan-crown { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--text); padding: 4px 20px; border-radius: 100px; font-size: 10px; letter-spacing: 2px; white-space: nowrap; }
+  .plan-name { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--lilac); margin-bottom: 20px; }
+  .plan.popular .plan-name { color: rgba(255,255,255,0.7); }
+  .plan-price { font-family: 'Marcellus', serif; font-size: 68px; line-height: 1; color: var(--text); }
+  .plan.popular .plan-price { color: var(--off-white); }
+  .plan-mo { font-size: 13px; color: var(--text-light); margin-bottom: 32px; }
+  .plan.popular .plan-mo { color: rgba(255,255,255,0.6); }
+  .plan-line { height: 1px; background: rgba(176,159,214,0.2); margin-bottom: 28px; }
+  .plan.popular .plan-line { background: rgba(255,255,255,0.2); }
+  .plan-list { list-style: none; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+  .plan-list li { font-size: 14px; color: var(--text-light); display: flex; gap: 10px; align-items: flex-start; }
+  .plan.popular .plan-list li { color: rgba(255,255,255,0.8); }
+  .plan-list li::before { content: '✦'; color: var(--gold); font-size: 10px; padding-top: 3px; flex-shrink: 0; }
+  .plan.popular .plan-list li::before { color: var(--gold-light); }
+  .plan-cta { margin-top: 32px; padding: 15px; border-radius: 100px; background: transparent; border: 1px solid rgba(176,159,214,0.4); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 13px; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; }
+  .plan-cta:hover { background: var(--lilac); border-color: var(--lilac); color: var(--off-white); }
+  .plan.popular .plan-cta { background: var(--off-white); border-color: var(--off-white); color: var(--lilac); }
+
+  /* CONTACT */
+  .contact { padding: 100px 80px; background: var(--off-white); }
+  .contact-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; }
+  .contact-left-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--lilac); margin-bottom: 24px; display: block; }
+  .contact-left h2 { font-family: 'Marcellus', serif; font-size: clamp(32px, 4vw, 56px); line-height: 1.1; margin-bottom: 40px; }
+  .contact-left h2 em { font-style: italic; color: var(--lilac); }
+  .contact-info { display: flex; flex-direction: column; gap: 24px; }
+  .contact-info-row { display: flex; gap: 16px; align-items: flex-start; padding-bottom: 24px; border-bottom: 1px solid rgba(176,159,214,0.15); }
+  .contact-info-row:last-child { border-bottom: none; }
+  .ci-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--lilac-pale); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .ci-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--lilac); display: block; margin-bottom: 4px; }
+  .ci-val { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+  .contact-form { background: var(--lilac-pale); border-radius: 24px; padding: 52px; display: flex; flex-direction: column; gap: 22px; }
+  .contact-form h3 { font-family: 'Marcellus', serif; font-size: 32px; font-weight: 400; }
+  .contact-form h3 em { font-style: italic; color: var(--lilac); }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-light); }
+  .form-group input, .form-group select, .form-group textarea { border: 1px solid rgba(176,159,214,0.3); border-radius: 12px; padding: 15px 18px; font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text); outline: none; background: var(--off-white); transition: border-color 0.3s; -webkit-appearance: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--lilac); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-submit { background: var(--lilac); color: var(--off-white); padding: 16px; border: none; border-radius: 100px; font-family: 'Nunito', sans-serif; font-size: 13px; letter-spacing: 3px; cursor: pointer; transition: background 0.3s; }
+  .form-submit:hover { background: #9680c2; }
+
+  /* FOOTER */
+  footer { background: var(--text); padding: 52px 80px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Marcellus', serif; font-size: 26px; color: var(--lilac-light); letter-spacing: 3px; }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a { color: rgba(255,255,255,0.35); text-decoration: none; font-size: 13px; letter-spacing: 1px; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--lilac-light); }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero, .about, .contact-inner { grid-template-columns: 1fr; }
+    .hero-right { padding: 60px 24px; }
+    .hero-left, .about, .features, .pricing, .contact { padding: 60px 24px; }
+    .features-head { flex-direction: column; gap: 20px; }
+    .features-head p { text-align: left; max-width: 100%; }
+    .features-grid, .plans { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Bloom</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#features">Programs</a></li>
+    <li><a href="#pricing">Memberships</a></li>
+    <li><a href="#contact">Book</a></li>
+  </ul>
+  <button class="nav-btn">Book a Class ✦</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-orb"></div>
+    <span class="hero-flower">Women's Wellness Studio</span>
+    <h1 class="hero-title">A space made<br>just for <em>you</em><br>to flourish</h1>
+    <p class="hero-desc">Bloom is a sanctuary designed for women — where fitness, mindfulness, and community come together. Every class, every coach, every detail is crafted with care.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-lilac">Explore Classes</a>
+      <a href="#contact" class="btn-text">Book a trial</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-deco"></div>
+    <div class="hero-right-deco2"></div>
+    <div class="hero-tagline">Where women<br>come to <em>grow</em></div>
+    <div class="hero-cards">
+      <div class="hero-card">
+        <h4>Barre Fusion</h4>
+        <p>Low-impact, high-results full body sculpting</p>
+        <div class="hero-card-time">Today at 9:00 AM · 8 spots left</div>
+      </div>
+      <div class="hero-card">
+        <h4>Pilates Reformer</h4>
+        <p>Core strength, flexibility, posture correction</p>
+        <div class="hero-card-time">Today at 11:00 AM · 5 spots left</div>
+      </div>
+      <div class="hero-card">
+        <h4>Mindful Movement</h4>
+        <p>Gentle yoga + breathwork + journaling</p>
+        <div class="hero-card-time">Today at 6:30 PM · 12 spots left</div>
+      </div>
+    </div>
+    <div class="hero-big-word">Bloom</div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-visual">
+    <div class="about-block">
+      <div class="block-icon">🌸</div>
+      <div class="block-num">Bloom</div>
+      <div class="block-label">Est. 2020 · NYC</div>
+    </div>
+    <div class="about-block">
+      <div class="block-num">1,200+</div>
+      <div class="block-label">Members</div>
+    </div>
+    <div class="about-block">
+      <div class="block-num">35+</div>
+      <div class="block-label">Classes / Week</div>
+    </div>
+  </div>
+  <div class="about-text">
+    <span class="about-text-tag">Our Story</span>
+    <h2>Built by women,<br><em>for women</em></h2>
+    <p>Bloom was born from a frustration with fitness spaces that weren't designed for us. Too loud, too competitive, too focused on aesthetics over how we actually feel.</p>
+    <p>So we built something different. A studio where the goal is joy, strength, and community — not comparison or punishment.</p>
+    <div class="about-values">
+      <div class="about-value">
+        <div class="about-value-dot"></div>
+        <div class="about-value-text"><h4>Inclusive by design</h4><p>Every body, every age, every fitness level — all welcome, always.</p></div>
+      </div>
+      <div class="about-value">
+        <div class="about-value-dot"></div>
+        <div class="about-value-text"><h4>Women-led</h4><p>Every coach, every class, every decision is led by women who get it.</p></div>
+      </div>
+      <div class="about-value">
+        <div class="about-value-dot"></div>
+        <div class="about-value-text"><h4>Holistic wellness</h4><p>Mind and body — we programme for both, every single week.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="features-head">
+    <div>
+      <span class="feat-tag">Our Programs</span>
+      <h2>Classes you'll<br>actually <em>love</em></h2>
+    </div>
+    <p>Movement should feel good. Our programs are designed to challenge, restore, and celebrate your body — never punish it.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🩰</div>
+      <h3>Barre & Sculpt</h3>
+      <p>Ballet-inspired movement combined with resistance training. Builds long, lean muscle with zero impact on your joints.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🧘</div>
+      <h3>Pilates & Core</h3>
+      <p>Mat and reformer Pilates classes targeting deep core strength, postural alignment, and mind-body connection.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">💆</div>
+      <h3>Mindful Wellness</h3>
+      <p>Gentle yoga, breathwork, and guided meditation sessions designed to reset your nervous system and restore your energy.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="pricing-head">
+    <span class="pricing-tag">Memberships</span>
+    <h2>Invest in your <em>wellbeing</em></h2>
+    <p>All memberships include access to our community app and monthly wellness workshops.</p>
+  </div>
+  <div class="plans">
+    <div class="plan">
+      <span class="plan-name">Drop-In</span>
+      <div class="plan-price">$28</div>
+      <div class="plan-mo">per class</div>
+      <div class="plan-line"></div>
+      <ul class="plan-list">
+        <li>Single class access</li>
+        <li>All class styles</li>
+        <li>Mat & equipment</li>
+        <li>App access</li>
+      </ul>
+      <button class="plan-cta">Book a Class</button>
+    </div>
+    <div class="plan popular">
+      <div class="plan-crown">✦ Most Popular</div>
+      <span class="plan-name">Monthly Unlimited</span>
+      <div class="plan-price">$129</div>
+      <div class="plan-mo">per month · cancel anytime</div>
+      <div class="plan-line"></div>
+      <ul class="plan-list">
+        <li>Unlimited classes</li>
+        <li>Priority booking</li>
+        <li>1 guest pass / month</li>
+        <li>Monthly workshop</li>
+        <li>Community app access</li>
+      </ul>
+      <button class="plan-cta">Get Started</button>
+    </div>
+    <div class="plan">
+      <span class="plan-name">10-Class Bundle</span>
+      <div class="plan-price">$220</div>
+      <div class="plan-mo">use within 6 months</div>
+      <div class="plan-line"></div>
+      <ul class="plan-list">
+        <li>10 classes pre-paid</li>
+        <li>All class styles</li>
+        <li>Shareable with a friend</li>
+        <li>App access</li>
+        <li>Never expires</li>
+      </ul>
+      <button class="plan-cta">Buy Bundle</button>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div>
+      <span class="contact-left-tag">Come Visit Us</span>
+      <h2>Start your <em>Bloom</em> journey</h2>
+      <div class="contact-info">
+        <div class="contact-info-row">
+          <div class="ci-icon">🌸</div>
+          <div><span class="ci-label">Studio Location</span><span class="ci-val">28 Garden Place, Soho<br>New York, NY 10012</span></div>
+        </div>
+        <div class="contact-info-row">
+          <div class="ci-icon">🕐</div>
+          <div><span class="ci-label">Studio Hours</span><span class="ci-val">Mon–Fri: 6:30am – 9:00pm<br>Sat–Sun: 8:00am – 6:00pm</span></div>
+        </div>
+        <div class="contact-info-row">
+          <div class="ci-icon">✉️</div>
+          <div><span class="ci-label">Contact</span><span class="ci-val">hello@bloomwellness.com<br>+1 (212) 555-0189</span></div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="return false">
+      <h3>Book a <em>Trial Class</em></h3>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Emma"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Clarke"></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+      <div class="form-group">
+        <label>Preferred Class</label>
+        <select><option>Barre Fusion</option><option>Pilates Mat</option><option>Pilates Reformer</option><option>Mindful Movement</option><option>Yoga Flow</option></select>
+      </div>
+      <div class="form-group"><label>Preferred Date</label><input type="date"></div>
+      <div class="form-group"><label>Tell us about yourself</label><textarea rows="3" placeholder="Experience level, any injuries, what brings you to Bloom..."></textarea></div>
+      <button class="form-submit">Book My Trial ✦</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Bloom</div>
+  <div class="footer-links">
+    <a href="#">Classes</a><a href="#">Instructors</a><a href="#">Retreats</a><a href="#">Instagram</a>
+  </div>
+  <p class="footer-copy">© 2024 Bloom Wellness Studio</p>
+</footer>
+</body>
+</html>

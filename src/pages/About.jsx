@@ -9,7 +9,7 @@ export default function About() {
       id="about"
       className="bg-[#181818] text-white py-10 md:py-24 lg:py-32  sm:px-10 md:px-16"
     >
-      <div className="max-w-350 mx-auto flex flex-col">
+      <div className="max-w-400 mx-auto flex flex-col">
 
         {/* ── Hero Text ── */}
         <div>

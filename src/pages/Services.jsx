@@ -1,4 +1,4 @@
-import ServicesSection, { HoverEffect } from "../Components/HoverEffect";
+import ServicesSection from "../Components/HoverEffect";
 // Services.jsx
 export default function Services() {
   

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow — Yoga & Mindfulness Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #87a878;
+    --sage-light: #b8cdb0;
+    --sage-pale: #e8f0e4;
+    --warm-white: #faf8f4;
+    --blush: #f0d9cc;
+    --blush-deep: #e0b89a;
+    --text: #3a3530;
+    --text-light: #8a7e76;
+    --gold: #c4a882;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--warm-white); color: var(--text); font-family: 'Jost', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    padding: 28px 80px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,248,244,0.95); backdrop-filter: blur(12px);
+  }
+  .nav-logo { font-family: 'Gilda Display', serif; font-size: 26px; letter-spacing: 4px; color: var(--sage); }
+  .nav-links { display: flex; gap: 48px; list-style: none; }
+  .nav-links a { color: var(--text-light); text-decoration: none; font-size: 13px; letter-spacing: 2px; font-weight: 400; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--sage); }
+  .nav-book { background: transparent; border: 1px solid var(--sage); color: var(--sage); padding: 11px 32px; font-family: 'Jost', sans-serif; font-size: 12px; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; }
+  .nav-book:hover { background: var(--sage); color: var(--warm-white); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+  .hero-left {
+    background: var(--sage-pale); display: flex; flex-direction: column;
+    justify-content: center; padding: 100px 80px; position: relative; overflow: hidden;
+  }
+  .hero-circle-dec {
+    position: absolute; width: 500px; height: 500px; border-radius: 50%;
+    border: 1px solid rgba(135,168,120,0.2); top: -100px; left: -100px;
+  }
+  .hero-circle-dec::after { content: ''; position: absolute; inset: 60px; border-radius: 50%; border: 1px solid rgba(135,168,120,0.15); }
+  .hero-tag { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--sage); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+  .hero-tag::before { content: ''; width: 32px; height: 1px; background: var(--sage); }
+  .hero-title { font-family: 'Gilda Display', serif; font-size: clamp(52px, 7vw, 88px); line-height: 1.05; color: var(--text); margin-bottom: 32px; position: relative; z-index: 1; }
+  .hero-title em { font-style: italic; color: var(--sage); }
+  .hero-desc { font-size: 16px; color: var(--text-light); line-height: 1.9; max-width: 400px; margin-bottom: 48px; position: relative; z-index: 1; }
+  .hero-btns { display: flex; gap: 20px; position: relative; z-index: 1; }
+  .btn-sage { background: var(--sage); color: var(--warm-white); padding: 16px 44px; border: none; font-family: 'Jost', sans-serif; font-size: 12px; letter-spacing: 3px; cursor: pointer; transition: background 0.3s; text-decoration: none; display: inline-block; }
+  .btn-sage:hover { background: #6a8f5c; }
+  .btn-ghost { background: transparent; color: var(--text); padding: 16px 44px; border: 1px solid rgba(58,53,48,0.2); font-family: 'Jost', sans-serif; font-size: 12px; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
+  .btn-ghost:hover { border-color: var(--sage); color: var(--sage); }
+  .hero-right { background: var(--blush); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+  .hero-right-circles { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .circle-1 { position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; border: 1px solid rgba(58,53,48,0.08); }
+  .circle-2 { position: absolute; width: 50%; aspect-ratio: 1; border-radius: 50%; border: 1px solid rgba(58,53,48,0.1); }
+  .circle-3 { position: absolute; width: 30%; aspect-ratio: 1; border-radius: 50%; border: 1px solid rgba(58,53,48,0.12); }
+  .hero-right-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); text-align: center; }
+  .hero-right-emoji { font-size: 96px; }
+  .hero-right-word { font-family: 'Gilda Display', serif; font-size: 64px; color: rgba(58,53,48,0.06); margin-top: -16px; }
+  .hero-right-info { padding: 48px; position: relative; z-index: 2; }
+  .schedule-preview { background: var(--warm-white); padding: 28px; box-shadow: 0 8px 40px rgba(58,53,48,0.1); }
+  .schedule-title { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--sage); margin-bottom: 20px; display: block; }
+  .schedule-rows { display: flex; flex-direction: column; gap: 14px; }
+  .schedule-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid rgba(58,53,48,0.07); }
+  .schedule-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .schedule-class h4 { font-size: 15px; font-weight: 400; color: var(--text); }
+  .schedule-class p { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  .schedule-time { font-size: 13px; color: var(--sage); font-weight: 500; }
+
+  /* ABOUT */
+  .about { padding: 120px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; max-width: 1400px; margin: 0 auto; }
+  .about-numbers { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .about-num-card { padding: 48px 40px; background: var(--sage-pale); }
+  .about-num-card:nth-child(2) { background: var(--blush); }
+  .about-num-card:nth-child(3) { background: var(--blush); }
+  .about-num-card:nth-child(4) { background: var(--sage-pale); }
+  .about-num { font-family: 'Gilda Display', serif; font-size: 56px; color: var(--sage); line-height: 1; }
+  .about-num-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-light); margin-top: 8px; }
+  .about-text-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--sage); margin-bottom: 24px; display: block; }
+  .about-text h2 { font-family: 'Gilda Display', serif; font-size: clamp(32px, 4vw, 52px); line-height: 1.15; margin-bottom: 28px; }
+  .about-text h2 em { font-style: italic; color: var(--sage); }
+  .about-text p { color: var(--text-light); line-height: 1.9; font-size: 15px; margin-bottom: 20px; }
+  .about-quote { margin-top: 36px; padding: 28px 32px; border-left: 2px solid var(--sage); background: var(--sage-pale); }
+  .about-quote p { font-family: 'Gilda Display', serif; font-style: italic; font-size: 18px; color: var(--text); line-height: 1.6; }
+  .about-quote cite { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--sage); margin-top: 12px; display: block; }
+
+  /* FEATURES */
+  .features { background: var(--text); padding: 120px 80px; }
+  .features-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; }
+  .features-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--sage-light); display: block; margin-bottom: 20px; }
+  .features-header h2 { font-family: 'Gilda Display', serif; font-size: clamp(32px, 4vw, 56px); color: var(--warm-white); line-height: 1.1; }
+  .features-header h2 em { font-style: italic; color: var(--sage-light); }
+  .features-header p { max-width: 300px; color: var(--text-light); font-size: 14px; line-height: 1.8; text-align: right; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .feat-card { background: rgba(255,255,255,0.03); padding: 52px 44px; transition: background 0.3s; }
+  .feat-card:hover { background: rgba(135,168,120,0.08); }
+  .feat-num { font-family: 'Gilda Display', serif; font-size: 48px; color: rgba(135,168,120,0.2); line-height: 1; margin-bottom: 24px; }
+  .feat-card h3 { font-family: 'Gilda Display', serif; font-size: 24px; color: var(--warm-white); font-weight: 400; margin-bottom: 16px; }
+  .feat-card p { font-size: 14px; color: var(--text-light); line-height: 1.8; }
+
+  /* PRICING */
+  .pricing { padding: 120px 80px; }
+  .pricing-header { text-align: center; margin-bottom: 72px; }
+  .pricing-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: 20px; }
+  .pricing-header h2 { font-family: 'Gilda Display', serif; font-size: clamp(36px, 5vw, 64px); line-height: 1.05; }
+  .pricing-header h2 em { font-style: italic; color: var(--sage); }
+  .pricing-header p { color: var(--text-light); font-size: 15px; margin-top: 16px; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .plan { padding: 48px 40px; border: 1px solid rgba(58,53,48,0.1); background: var(--warm-white); position: relative; transition: all 0.3s; }
+  .plan:hover { border-color: var(--sage); transform: translateY(-6px); }
+  .plan.featured { background: var(--sage); border-color: var(--sage); }
+  .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--text); padding: 4px 20px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
+  .plan-name { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--sage); margin-bottom: 16px; display: block; }
+  .plan.featured .plan-name { color: rgba(250,248,244,0.7); }
+  .plan-price { font-family: 'Gilda Display', serif; font-size: 64px; line-height: 1; margin-bottom: 4px; }
+  .plan.featured .plan-price { color: var(--warm-white); }
+  .plan-period { font-size: 13px; color: var(--text-light); margin-bottom: 32px; }
+  .plan.featured .plan-period { color: rgba(250,248,244,0.6); }
+  .plan-line { height: 1px; background: rgba(58,53,48,0.08); margin-bottom: 32px; }
+  .plan.featured .plan-line { background: rgba(250,248,244,0.2); }
+  .plan-perks { list-style: none; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+  .plan-perks li { font-size: 14px; color: var(--text-light); display: flex; gap: 12px; align-items: flex-start; }
+  .plan.featured .plan-perks li { color: rgba(250,248,244,0.8); }
+  .plan-perks li::before { content: '✦'; color: var(--sage); font-size: 10px; padding-top: 3px; flex-shrink: 0; }
+  .plan.featured .plan-perks li::before { color: rgba(250,248,244,0.6); }
+  .plan-cta { margin-top: 36px; width: 100%; padding: 16px; background: transparent; border: 1px solid rgba(58,53,48,0.2); color: var(--text); font-family: 'Jost', sans-serif; font-size: 12px; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; }
+  .plan-cta:hover { background: var(--sage); border-color: var(--sage); color: var(--warm-white); }
+  .plan.featured .plan-cta { background: var(--warm-white); border-color: var(--warm-white); color: var(--sage); }
+
+  /* CONTACT */
+  .contact { background: var(--sage-pale); padding: 120px 80px; }
+  .contact-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; }
+  .contact-left span { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: 24px; }
+  .contact-left h2 { font-family: 'Gilda Display', serif; font-size: clamp(32px, 4vw, 56px); line-height: 1.1; margin-bottom: 40px; }
+  .contact-left h2 em { font-style: italic; color: var(--sage); }
+  .contact-details { display: flex; flex-direction: column; gap: 28px; }
+  .contact-det { display: flex; gap: 16px; }
+  .contact-det-icon { font-size: 20px; }
+  .contact-det label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: 4px; }
+  .contact-det p { color: var(--text-light); font-size: 14px; line-height: 1.7; }
+  .contact-form { background: var(--warm-white); padding: 52px; box-shadow: 0 8px 40px rgba(58,53,48,0.08); display: flex; flex-direction: column; gap: 22px; }
+  .contact-form h3 { font-family: 'Gilda Display', serif; font-size: 32px; font-weight: 400; margin-bottom: 4px; }
+  .contact-form h3 em { font-style: italic; color: var(--sage); }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-light); }
+  .form-group input, .form-group select, .form-group textarea { border: 1px solid rgba(58,53,48,0.12); padding: 15px 18px; font-family: 'Jost', sans-serif; font-size: 14px; color: var(--text); outline: none; background: transparent; transition: border-color 0.3s; -webkit-appearance: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--sage); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-submit { background: var(--sage); color: var(--warm-white); padding: 17px; border: none; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+  .form-submit:hover { background: #6a8f5c; }
+
+  /* FOOTER */
+  footer { background: var(--text); padding: 56px 80px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Gilda Display', serif; font-size: 28px; color: var(--sage-light); letter-spacing: 4px; }
+  .footer-links { display: flex; gap: 36px; }
+  .footer-links a { color: rgba(250,248,244,0.4); text-decoration: none; font-size: 12px; letter-spacing: 2px; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--sage-light); }
+  .footer-copy { font-size: 12px; color: rgba(250,248,244,0.2); }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero, .about, .contact-inner { grid-template-columns: 1fr; }
+    .hero-right { min-height: 400px; }
+    .hero-left, .about, .features, .pricing, .contact { padding: 60px 24px; }
+    .features-header, .features-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .features-header { flex-direction: column; gap: 20px; }
+    .features-header p { text-align: left; max-width: 100%; }
+    footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Flow</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#features">Classes</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Book</a></li>
+  </ul>
+  <button class="nav-book">Book a Class</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-circle-dec"></div>
+    <span class="hero-tag">Yoga & Mindfulness Studio</span>
+    <h1 class="hero-title">Find your<br><em>stillness</em><br>in motion</h1>
+    <p class="hero-desc">Flow is a sanctuary for body and mind. Whether you're a beginner or seasoned practitioner, every class is an invitation to return to yourself.</p>
+    <div class="hero-btns">
+      <a href="#pricing" class="btn-sage">View Classes</a>
+      <a href="#contact" class="btn-ghost">Book a Trial</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-circles">
+      <div class="circle-1"></div>
+      <div class="circle-2"></div>
+      <div class="circle-3"></div>
+    </div>
+    <div class="hero-right-center">
+      <div class="hero-right-emoji">🧘</div>
+      <div class="hero-right-word">Flow</div>
+    </div>
+    <div class="hero-right-info">
+      <div class="schedule-preview">
+        <span class="schedule-title">Today's Classes</span>
+        <div class="schedule-rows">
+          <div class="schedule-row">
+            <div class="schedule-class"><h4>Morning Vinyasa</h4><p>with Sarah M. · All levels</p></div>
+            <span class="schedule-time">7:00 AM</span>
+          </div>
+          <div class="schedule-row">
+            <div class="schedule-class"><h4>Yin & Restore</h4><p>with James K. · Beginner</p></div>
+            <span class="schedule-time">12:00 PM</span>
+          </div>
+          <div class="schedule-row">
+            <div class="schedule-class"><h4>Power Flow</h4><p>with Priya L. · Intermediate</p></div>
+            <span class="schedule-time">6:30 PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-numbers">
+    <div class="about-num-card"><div class="about-num">7+</div><div class="about-num-label">Years in practice</div></div>
+    <div class="about-num-card"><div class="about-num">28</div><div class="about-num-label">Weekly classes</div></div>
+    <div class="about-num-card"><div class="about-num">8</div><div class="about-num-label">Expert instructors</div></div>
+    <div class="about-num-card"><div class="about-num">800+</div><div class="about-num-label">Members</div></div>
+  </div>
+  <div class="about-text">
+    <span class="about-text-tag">Our Philosophy</span>
+    <h2>Yoga is not about<br><em>perfecting</em> the pose</h2>
+    <p>Flow was founded on the belief that yoga is a practice for every body — not a performance for the flexible. We've created a space where showing up is enough, and everything else unfolds naturally.</p>
+    <p>Our instructors bring diverse training from Mysore, Bali, and beyond — united by a shared commitment to accessible, honest, and deeply nourishing practice.</p>
+    <div class="about-quote">
+      <p>"The goal of yoga is not to control your mind, but to silence it."</p>
+      <cite>— B.K.S. Iyengar</cite>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="features-header">
+    <div>
+      <span class="features-tag">What We Offer</span>
+      <h2>Classes for every<br><em>journey</em></h2>
+    </div>
+    <p>From the first breath to the deepest practice — we have a class to meet you exactly where you are.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-num">01</div>
+      <h3>Vinyasa Flow</h3>
+      <p>Dynamic, breath-linked movement that builds strength and flexibility. Available at beginner, intermediate, and advanced levels throughout the week.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">02</div>
+      <h3>Yin & Restorative</h3>
+      <p>Long-held poses that target connective tissue and the nervous system. The perfect antidote to a busy life — slow, quiet, and deeply effective.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">03</div>
+      <h3>Meditation & Breathwork</h3>
+      <p>Dedicated sessions exploring pranayama, guided meditation, and mindfulness. No prior experience needed — just a willingness to sit.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="pricing-header">
+    <span class="pricing-tag">Membership</span>
+    <h2>Simple, <em>honest</em> pricing</h2>
+    <p>No hidden fees. Pause or cancel anytime.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <span class="plan-name">Casual</span>
+      <div class="plan-price">$22</div>
+      <div class="plan-period">per class (drop-in)</div>
+      <div class="plan-line"></div>
+      <ul class="plan-perks">
+        <li>Any single class</li>
+        <li>All class styles</li>
+        <li>Mat & props included</li>
+        <li>App booking access</li>
+      </ul>
+      <button class="plan-cta">Book a Class</button>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">Most Popular</div>
+      <span class="plan-name">Monthly Unlimited</span>
+      <div class="plan-price">$109</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-line"></div>
+      <ul class="plan-perks">
+        <li>Unlimited classes</li>
+        <li>Priority booking</li>
+        <li>Guest pass (1/month)</li>
+        <li>Workshop discounts</li>
+        <li>Community access</li>
+      </ul>
+      <button class="plan-cta">Get Started</button>
+    </div>
+    <div class="plan">
+      <span class="plan-name">10-Class Pass</span>
+      <div class="plan-price">$180</div>
+      <div class="plan-period">never expires</div>
+      <div class="plan-line"></div>
+      <ul class="plan-perks">
+        <li>10 classes, use anytime</li>
+        <li>All class styles</li>
+        <li>Mat & props included</li>
+        <li>App booking access</li>
+        <li>Shareable with a friend</li>
+      </ul>
+      <button class="plan-cta">Buy a Pass</button>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <span>Come Practice With Us</span>
+      <h2>Begin your <em>journey</em> here</h2>
+      <div class="contact-details">
+        <div class="contact-det">
+          <span class="contact-det-icon">🌿</span>
+          <div><label>Studio Location</label><p>34 Tranquil Lane, West Village<br>New York, NY 10014</p></div>
+        </div>
+        <div class="contact-det">
+          <span class="contact-det-icon">🕊️</span>
+          <div><label>Studio Hours</label><p>Mon–Fri: 6:30am – 9:00pm<br>Sat–Sun: 7:30am – 7:00pm</p></div>
+        </div>
+        <div class="contact-det">
+          <span class="contact-det-icon">✉️</span>
+          <div><label>Get In Touch</label><p>hello@flowstudio.com<br>+1 (212) 555-0176</p></div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="return false">
+      <h3>Book a <em>Trial Class</em></h3>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Anya"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Patel"></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+      <div class="form-group">
+        <label>Class Style</label>
+        <select>
+          <option>Vinyasa Flow</option>
+          <option>Yin & Restorative</option>
+          <option>Power Flow</option>
+          <option>Meditation & Breathwork</option>
+          <option>Morning Flow</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Experience Level</label>
+        <select>
+          <option>Complete Beginner</option>
+          <option>Some Experience</option>
+          <option>Regular Practitioner</option>
+          <option>Advanced / Teacher</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Preferred Date & Time</label><input type="datetime-local"></div>
+      <div class="form-group"><label>Anything we should know?</label><textarea rows="3" placeholder="Injuries, limitations, or questions..."></textarea></div>
+      <button class="form-submit">Book My Trial Class</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Flow</div>
+  <div class="footer-links">
+    <a href="#">Schedule</a><a href="#">Teachers</a><a href="#">Retreats</a><a href="#">Instagram</a>
+  </div>
+  <p class="footer-copy">© 2024 Flow Yoga Studio</p>
+</footer>
+</body>
+</html>

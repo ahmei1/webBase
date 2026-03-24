@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember — Fine Dining</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0705;
+    --deep: #130f0a;
+    --gold: #c9a84c;
+    --gold-light: #e8c96e;
+    --red: #8b1a1a;
+    --cream: #f5ede0;
+    --text-muted: #8a7a6a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--cream); font-family: 'Montserrat', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 28px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(10,7,5,0.95), transparent);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; letter-spacing: 8px;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    color: var(--cream); text-decoration: none; font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase; opacity: 0.7;
+    transition: opacity 0.3s, color 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+  .nav-reserve {
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 10px 24px; font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; cursor: pointer; background: transparent;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s;
+  }
+  .nav-reserve:hover { background: var(--gold); color: var(--black); }
+
+  /* HERO */
+  .hero {
+    height: 100vh; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 60%, #3a1a0a 0%, #0a0705 60%);
+  }
+  .hero-line-left {
+    position: absolute; left: 60px; top: 50%;
+    transform: translateY(-50%);
+    width: 1px; height: 200px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  }
+  .hero-line-right {
+    position: absolute; right: 60px; top: 50%;
+    transform: translateY(-50%);
+    width: 1px; height: 200px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  }
+  .hero-content { text-align: center; z-index: 2; animation: fadeUp 1.2s ease both; }
+  .hero-eyebrow {
+    font-size: 10px; letter-spacing: 6px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px; opacity: 0.8;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(72px, 12vw, 140px);
+    font-weight: 300; line-height: 0.9;
+    letter-spacing: -2px;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    margin-top: 32px; font-size: 12px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--text-muted);
+    animation: fadeUp 1.2s 0.3s ease both;
+  }
+  .hero-divider {
+    width: 60px; height: 1px; background: var(--gold);
+    margin: 32px auto; opacity: 0.6;
+  }
+  .hero-cta {
+    display: inline-block; padding: 16px 48px;
+    border: 1px solid var(--gold); color: var(--gold);
+    text-decoration: none; font-size: 10px; letter-spacing: 4px;
+    text-transform: uppercase; transition: all 0.4s;
+    animation: fadeUp 1.2s 0.5s ease both;
+  }
+  .hero-cta:hover { background: var(--gold); color: var(--black); }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--text-muted); display: flex; flex-direction: column;
+    align-items: center; gap: 12px;
+  }
+  .hero-scroll::after {
+    content: ''; width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollLine 1.5s infinite;
+  }
+
+  /* ABOUT */
+  .about {
+    padding: 140px 60px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 120px;
+    align-items: center; max-width: 1400px; margin: 0 auto;
+  }
+  .about-text .section-label {
+    font-size: 9px; letter-spacing: 6px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+  }
+  .about-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 300; line-height: 1.1;
+    margin-bottom: 32px;
+  }
+  .about-text h2 em { font-style: italic; color: var(--gold); }
+  .about-text p {
+    color: var(--text-muted); line-height: 1.9;
+    font-size: 14px; margin-bottom: 20px;
+  }
+  .about-image {
+    position: relative; aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #2a1a0e, #1a0d05);
+    overflow: hidden;
+  }
+  .about-image::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.15) 0%, transparent 70%);
+  }
+  .about-image-text {
+    position: absolute; bottom: 40px; left: 40px; right: 40px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300; font-style: italic;
+    color: rgba(201,168,76,0.3); line-height: 1;
+  }
+  .about-image-border {
+    position: absolute; inset: 16px;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  /* FEATURES */
+  .features {
+    padding: 100px 60px;
+    background: var(--deep);
+    position: relative;
+  }
+  .features::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .features-header { text-align: center; margin-bottom: 80px; }
+  .features-header .section-label {
+    font-size: 9px; letter-spacing: 6px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px; display: block;
+  }
+  .features-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 54px); font-weight: 300;
+  }
+  .features-header h2 em { font-style: italic; color: var(--gold); }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; max-width: 1200px; margin: 0 auto;
+  }
+  .feature-card {
+    padding: 60px 48px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(201,168,76,0.1);
+    transition: all 0.4s; position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1px; background: var(--gold);
+    transition: width 0.4s;
+  }
+  .feature-card:hover::before { width: 100%; }
+  .feature-card:hover { background: rgba(201,168,76,0.05); }
+  .feature-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px; font-weight: 300; color: rgba(201,168,76,0.15);
+    line-height: 1; margin-bottom: 24px;
+  }
+  .feature-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 400; margin-bottom: 16px;
+    color: var(--cream);
+  }
+  .feature-card p { color: var(--text-muted); font-size: 13px; line-height: 1.8; }
+
+  /* MENU PRICING */
+  .pricing {
+    padding: 140px 60px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .pricing-header { text-align: center; margin-bottom: 80px; }
+  .pricing-header .section-label {
+    font-size: 9px; letter-spacing: 6px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px; display: block;
+  }
+  .pricing-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 54px); font-weight: 300;
+  }
+  .pricing-tabs {
+    display: flex; justify-content: center; gap: 0;
+    margin-bottom: 60px;
+  }
+  .pricing-tab {
+    padding: 12px 40px; background: transparent;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--text-muted); cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    letter-spacing: 3px; text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .pricing-tab.active, .pricing-tab:hover {
+    background: var(--gold); color: var(--black); border-color: var(--gold);
+  }
+  .menu-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  }
+  .menu-item {
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 24px; transition: all 0.3s;
+  }
+  .menu-item:hover { padding-left: 16px; }
+  .menu-item-left h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 400; margin-bottom: 6px;
+  }
+  .menu-item-left p { font-size: 12px; color: var(--text-muted); }
+  .menu-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--gold); white-space: nowrap;
+  }
+  .menu-col { padding: 0 40px; }
+  .menu-col:first-child { padding-left: 0; border-right: 1px solid rgba(201,168,76,0.1); }
+  .menu-col:last-child { padding-right: 0; }
+
+  /* CONTACT */
+  .contact {
+    padding: 140px 60px;
+    background: var(--deep); position: relative;
+  }
+  .contact::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .contact-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 120px;
+  }
+  .contact-info .section-label {
+    font-size: 9px; letter-spacing: 6px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px; display: block;
+  }
+  .contact-info h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 54px); font-weight: 300;
+    line-height: 1.1; margin-bottom: 40px;
+  }
+  .contact-info h2 em { font-style: italic; color: var(--gold); }
+  .contact-detail { margin-bottom: 32px; }
+  .contact-detail label {
+    font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); display: block; margin-bottom: 8px;
+  }
+  .contact-detail p { color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+  .contact-form { display: flex; flex-direction: column; gap: 24px; }
+  .form-group { display: flex; flex-direction: column; gap: 10px; }
+  .form-group label {
+    font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold);
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--cream); padding: 16px 20px;
+    font-family: 'Montserrat', sans-serif; font-size: 13px;
+    outline: none; transition: border-color 0.3s;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-group select option { background: var(--deep); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-submit {
+    padding: 18px 48px; background: transparent;
+    border: 1px solid var(--gold); color: var(--gold);
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    letter-spacing: 4px; text-transform: uppercase; cursor: pointer;
+    transition: all 0.4s; align-self: flex-start;
+  }
+  .form-submit:hover { background: var(--gold); color: var(--black); }
+
+  /* FOOTER */
+  footer {
+    padding: 60px; border-top: 1px solid rgba(201,168,76,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 300; letter-spacing: 8px;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .footer-copy { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; }
+  .footer-social { display: flex; gap: 24px; }
+  .footer-social a {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--text-muted); text-decoration: none; transition: color 0.3s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .about, .contact-inner { grid-template-columns: 1fr; gap: 60px; }
+    .features-grid, .menu-grid { grid-template-columns: 1fr; }
+    .about, .features, .pricing, .contact { padding: 80px 24px; }
+    footer { flex-direction: column; gap: 24px; text-align: center; }
+    .menu-col { padding: 0; border: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Ember</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reserve">Reserve</a></li>
+  </ul>
+  <button class="nav-reserve">Reserve a Table</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line-left"></div>
+  <div class="hero-line-right"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Est. 2019 — New York City</p>
+    <h1 class="hero-title">Em<em>ber</em></h1>
+    <p class="hero-sub">Where Fire Meets Finesse</p>
+    <div class="hero-divider"></div>
+    <a href="#menu" class="hero-cta">Explore the Menu</a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-text">
+    <p class="section-label">Our Philosophy</p>
+    <h2>Cuisine Born from <em>Passion</em></h2>
+    <p>Ember was born from a singular obsession: the transformative power of fire. Our open-flame kitchen is the heart of every dish, coaxing flavors that no other technique can achieve.</p>
+    <p>Chef Marco Alverez brings fifteen years of Michelin-starred experience to each plate — a meditation on restraint, precision, and the beauty of exceptional ingredients.</p>
+    <p>We source exclusively from local farms within 150 miles, rotating our tasting menu with the rhythms of the season.</p>
+  </div>
+  <div class="about-image">
+    <div class="about-image-border"></div>
+    <div class="about-image-text">Fire &amp;<br>Finesse</div>
+  </div>
+</section>
+
+<section class="features" id="experience">
+  <div class="features-header">
+    <span class="section-label">The Experience</span>
+    <h2>Every Detail, <em>Considered</em></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-number">01</div>
+      <h3>Open Flame Kitchen</h3>
+      <p>Watch our chefs orchestrate fire with precision. The open kitchen is theater — every course a performance crafted before your eyes.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-number">02</div>
+      <h3>Sommelier Selected Pairings</h3>
+      <p>Our resident sommelier curates each wine pairing with obsessive care, drawing from a cellar of over 800 labels across four continents.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-number">03</div>
+      <h3>Private Dining Room</h3>
+      <p>An intimate sanctuary for ten guests. Perfect for proposals, anniversaries, or simply an evening that demands complete privacy.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="menu">
+  <div class="pricing-header">
+    <span class="section-label">The Menu</span>
+    <h2>Seasonal <em>Offerings</em></h2>
+  </div>
+  <div class="pricing-tabs">
+    <button class="pricing-tab active" onclick="switchTab(this, 'tasting')">Tasting Menu</button>
+    <button class="pricing-tab" onclick="switchTab(this, 'ala')">À La Carte</button>
+    <button class="pricing-tab" onclick="switchTab(this, 'drinks')">Cellar</button>
+  </div>
+  <div id="tasting" class="menu-grid tab-content">
+    <div class="menu-col">
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <h4>Amuse-Bouche</h4>
+          <p>Chef's daily selection</p>
+        </div>
+        <span class="menu-price">Complimentary</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <h4>Fire-Kissed Oyster</h4>
+          <p>Champagne mignonette, caviar</p>
+        </div>
+        <span class="menu-price">$38</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <h4>Charred Leek Velouté</h4>
+          <p>Black truffle, chive oil</p>
+        </div>
+        <span class="menu-price">$42</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <h4>Flame-Seared Halibut</h4>
+          <p>Saffron beurre blanc, sea herbs</p>
+        </div>
+        <span class="menu-price">$68</span>
+      </div>
+    </div>
+    <div class="menu-col">
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <h4>Ember-Aged Wagyu</h4>
+          <p>A5 sirloin, bone marrow butter</p>
+        </div>
+        <span class="menu-price">$145</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <h4>Roasted Foie Gras</h4>
+          <p>Brioche, fig jam, Sauternes gel</p>
+        </div>
+        <span class="menu-price">$58</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <h4>Burnt Honey Soufflé</h4>
+          <p>Lavender ice cream, tuile</p>
+        </div>
+        <span class="menu-price">$28</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <h4>7-Course Tasting</h4>
+          <p>With optional wine pairing</p>
+        </div>
+        <span class="menu-price">$210</span>
+      </div>
+    </div>
+  </div>
+  <div id="ala" class="menu-grid tab-content" style="display:none">
+    <div class="menu-col">
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Grilled Octopus</h4><p>Chorizo, smoked paprika aioli</p></div>
+        <span class="menu-price">$34</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Burrata Bruschetta</h4><p>Heirloom tomato, aged balsamic</p></div>
+        <span class="menu-price">$22</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Duck Confit</h4><p>Lentils du Puy, orange jus</p></div>
+        <span class="menu-price">$52</span>
+      </div>
+    </div>
+    <div class="menu-col">
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Short Rib</h4><p>48-hr braise, truffle pomme purée</p></div>
+        <span class="menu-price">$65</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Lobster Bisque</h4><p>Tarragon cream, croutons</p></div>
+        <span class="menu-price">$24</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Chocolate Fondant</h4><p>Salted caramel, Tahitian vanilla</p></div>
+        <span class="menu-price">$18</span>
+      </div>
+    </div>
+  </div>
+  <div id="drinks" class="menu-grid tab-content" style="display:none">
+    <div class="menu-col">
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Château Margaux 2015</h4><p>Bordeaux, France</p></div>
+        <span class="menu-price">$380</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Krug Grande Cuvée</h4><p>Champagne, France</p></div>
+        <span class="menu-price">$280</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Opus One 2018</h4><p>Napa Valley, USA</p></div>
+        <span class="menu-price">$320</span>
+      </div>
+    </div>
+    <div class="menu-col">
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Sancerre Blanc</h4><p>Loire Valley, France</p></div>
+        <span class="menu-price">$95</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Barolo DOCG 2016</h4><p>Piedmont, Italy</p></div>
+        <span class="menu-price">$165</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left"><h4>Wine Pairing (7 pours)</h4><p>Curated by our sommelier</p></div>
+        <span class="menu-price">$120</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="reserve">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <span class="section-label">Reservations</span>
+      <h2>Reserve Your <em>Evening</em></h2>
+      <div class="contact-detail">
+        <label>Address</label>
+        <p>42 Ember Lane, West Village<br>New York, NY 10014</p>
+      </div>
+      <div class="contact-detail">
+        <label>Hours</label>
+        <p>Tuesday – Saturday<br>Dinner: 6:00pm – 10:30pm</p>
+      </div>
+      <div class="contact-detail">
+        <label>Reservations</label>
+        <p>+1 (212) 555-0182<br>reservations@emberdining.com</p>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="return false">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="James">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Whitmore">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date">
+        </div>
+        <div class="form-group">
+          <label>Time</label>
+          <select>
+            <option>6:00 PM</option>
+            <option>6:30 PM</option>
+            <option>7:00 PM</option>
+            <option>7:30 PM</option>
+            <option>8:00 PM</option>
+            <option>8:30 PM</option>
+            <option>9:00 PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Guests</label>
+        <select>
+          <option>2 Guests</option>
+          <option>3 Guests</option>
+          <option>4 Guests</option>
+          <option>5 Guests</option>
+          <option>6 Guests</option>
+          <option>Private Dining (up to 10)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Special Requests</label>
+        <textarea rows="4" placeholder="Dietary requirements, celebrations, preferences..."></textarea>
+      </div>
+      <button class="form-submit">Request Reservation</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Ember</div>
+  <p class="footer-copy">© 2024 Ember Fine Dining. All rights reserved.</p>
+  <div class="footer-social">
+    <a href="#">Instagram</a>
+    <a href="#">OpenTable</a>
+    <a href="#">Press</a>
+  </div>
+</footer>
+
+<script>
+function switchTab(btn, id) {
+  document.querySelectorAll('.pricing-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+  btn.classList.add('active');
+  document.getElementById(id).style.display = 'grid';
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .menu-item, .about-text, .contact-info').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

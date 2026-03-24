@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apex — High Performance Gym</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --grey: #1a1a1a;
+    --neon: #b0ff00;
+    --neon-dim: rgba(176,255,0,0.15);
+    --white: #f5f5f5;
+    --muted: #666666;
+    --concrete: #2a2a2a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* SCANLINE */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 2px);
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 0 60px; height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(10,10,10,0.95); border-bottom: 1px solid rgba(176,255,0,0.2);
+    backdrop-filter: blur(10px);
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px; font-weight: 900; letter-spacing: 6px;
+    color: var(--white); text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--neon); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 12px;
+    letter-spacing: 3px; text-transform: uppercase; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--neon); }
+  .nav-cta {
+    background: var(--neon); color: var(--black);
+    padding: 10px 28px; border: none; cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 18px;
+    font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    transition: all 0.2s; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .nav-cta:hover { background: var(--white); transform: scale(1.02); }
+
+  /* HERO */
+  .hero {
+    padding-top: 72px; min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+    font-family: 'Barlow Condensed', sans-serif; font-size: 28vw; font-weight: 900;
+    color: rgba(176,255,0,0.04); text-transform: uppercase; line-height: 1;
+    pointer-events: none; user-select: none; white-space: nowrap;
+  }
+  .hero-content { padding: 80px 60px; position: relative; z-index: 2; }
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 32px;
+  }
+  .hero-eyebrow-line { width: 48px; height: 2px; background: var(--neon); }
+  .hero-eyebrow-text {
+    font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--neon); font-weight: 500;
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(80px, 14vw, 180px); font-weight: 900;
+    text-transform: uppercase; line-height: 0.85;
+    letter-spacing: -2px;
+  }
+  .hero-title .outline {
+    -webkit-text-stroke: 2px var(--white);
+    color: transparent;
+  }
+  .hero-title .neon { color: var(--neon); }
+  .hero-bottom {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-top: 60px; gap: 40px;
+  }
+  .hero-desc {
+    max-width: 440px; color: var(--muted); line-height: 1.8;
+    font-size: 15px;
+  }
+  .hero-stats { display: flex; gap: 60px; }
+  .hero-stat-num {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 56px;
+    font-weight: 900; color: var(--neon); line-height: 1;
+  }
+  .hero-stat-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+  .hero-ctas { margin-top: 40px; display: flex; gap: 16px; }
+  .cta-primary {
+    background: var(--neon); color: var(--black);
+    padding: 16px 48px; border: none; cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 20px;
+    font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.2s; text-decoration: none; display: inline-block;
+  }
+  .cta-primary:hover { background: var(--white); }
+  .cta-secondary {
+    background: transparent; color: var(--white);
+    padding: 16px 48px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 20px;
+    font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    transition: all 0.2s; text-decoration: none; display: inline-block;
+  }
+  .cta-secondary:hover { border-color: var(--neon); color: var(--neon); }
+  .hero-ticker {
+    margin-top: 80px; border-top: 1px solid rgba(176,255,0,0.2);
+    border-bottom: 1px solid rgba(176,255,0,0.2);
+    padding: 16px 0; overflow: hidden; position: relative;
+  }
+  .ticker-inner {
+    display: flex; gap: 80px; animation: ticker 20s linear infinite; white-space: nowrap;
+  }
+  .ticker-item {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 16px;
+    font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--neon); flex-shrink: 0; display: flex; align-items: center; gap: 20px;
+  }
+  .ticker-dot { width: 6px; height: 6px; background: var(--neon); border-radius: 50%; flex-shrink: 0; }
+
+  /* FEATURES */
+  .features { padding: 120px 60px; background: var(--dark); }
+  .section-eyebrow {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 48px;
+  }
+  .section-eyebrow-line { width: 40px; height: 2px; background: var(--neon); }
+  .section-eyebrow-text { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--neon); font-weight: 500; }
+  .features-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; }
+  .features-header h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(48px, 7vw, 96px); font-weight: 900;
+    text-transform: uppercase; line-height: 0.9;
+  }
+  .features-header h2 .outline {
+    -webkit-text-stroke: 2px var(--white); color: transparent;
+  }
+  .features-header p { max-width: 320px; color: var(--muted); line-height: 1.7; font-size: 14px; text-align: right; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .feat-card {
+    background: var(--grey); padding: 48px 40px;
+    border-left: 3px solid transparent; transition: all 0.3s; cursor: default;
+  }
+  .feat-card:hover { border-left-color: var(--neon); background: var(--concrete); }
+  .feat-card-icon {
+    font-size: 36px; margin-bottom: 24px; display: block;
+    filter: grayscale(1); transition: filter 0.3s;
+  }
+  .feat-card:hover .feat-card-icon { filter: none; }
+  .feat-card h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 28px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .feat-card p { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+  /* PRICING */
+  .pricing { padding: 120px 60px; background: var(--black); }
+  .pricing-header { text-align: center; margin-bottom: 72px; }
+  .pricing-header h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(52px, 8vw, 100px); font-weight: 900;
+    text-transform: uppercase; line-height: 0.9;
+  }
+  .pricing-header h2 span { color: var(--neon); }
+  .pricing-header p { color: var(--muted); font-size: 15px; margin-top: 16px; letter-spacing: 1px; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; max-width: 1200px; margin: 0 auto; }
+  .plan {
+    background: var(--grey); padding: 48px 40px;
+    display: flex; flex-direction: column; position: relative; overflow: hidden;
+    transition: transform 0.3s;
+  }
+  .plan:hover { transform: translateY(-8px); }
+  .plan.featured { background: var(--neon); }
+  .plan-tag {
+    position: absolute; top: 24px; right: 24px;
+    background: var(--neon); color: var(--black);
+    padding: 4px 14px; font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .plan.featured .plan-tag { background: var(--black); color: var(--neon); }
+  .plan-name {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 14px;
+    font-weight: 700; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--neon); margin-bottom: 8px;
+  }
+  .plan.featured .plan-name { color: var(--black); }
+  .plan-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 80px; font-weight: 900; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .plan.featured .plan-price { color: var(--black); }
+  .plan-period { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  .plan.featured .plan-period { color: rgba(0,0,0,0.6); }
+  .plan-divider { height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 32px; }
+  .plan.featured .plan-divider { background: rgba(0,0,0,0.15); }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+  .plan-features li {
+    font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 12px;
+  }
+  .plan.featured .plan-features li { color: rgba(0,0,0,0.7); }
+  .plan-features li::before { content: '—'; color: var(--neon); font-weight: 700; }
+  .plan.featured .plan-features li::before { color: var(--black); }
+  .plan-btn {
+    margin-top: 36px; padding: 16px; width: 100%;
+    background: transparent; border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white); cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 18px;
+    font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .plan-btn:hover { background: var(--neon); border-color: var(--neon); color: var(--black); }
+  .plan.featured .plan-btn {
+    background: var(--black); border-color: var(--black); color: var(--neon);
+  }
+  .plan.featured .plan-btn:hover { background: var(--dark); }
+
+  /* CONTACT */
+  .contact { padding: 120px 60px; background: var(--dark); }
+  .contact-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; }
+  .contact-left h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(52px, 7vw, 90px); font-weight: 900;
+    text-transform: uppercase; line-height: 0.9; margin-bottom: 48px;
+  }
+  .contact-left h2 span { color: var(--neon); -webkit-text-stroke: 0; }
+  .contact-left h2 .ol { -webkit-text-stroke: 2px var(--white); color: transparent; }
+  .contact-details { display: flex; flex-direction: column; gap: 28px; }
+  .contact-detail { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .contact-detail:last-child { border-bottom: none; }
+  .contact-detail-icon { font-size: 24px; }
+  .contact-detail-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--neon); display: block; margin-bottom: 6px; }
+  .contact-detail-val { color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--neon); font-weight: 500; }
+  .form-group input, .form-group select, .form-group textarea {
+    background: var(--grey); border: 1px solid rgba(255,255,255,0.06);
+    color: var(--white); padding: 16px 20px;
+    font-family: 'Barlow', sans-serif; font-size: 14px;
+    outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--neon); }
+  .form-group select option { background: var(--grey); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-submit {
+    background: var(--neon); color: var(--black); padding: 18px;
+    border: none; cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 22px;
+    font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+    transition: all 0.2s; clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  }
+  .form-submit:hover { background: var(--white); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black); border-top: 1px solid rgba(176,255,0,0.15);
+    padding: 48px 60px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
+  .footer-logo span { color: var(--neon); }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--neon); }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-content { padding: 60px 24px; }
+    .hero-bottom { flex-direction: column; }
+    .features, .pricing, .contact { padding: 60px 24px; }
+    .features-header { flex-direction: column; gap: 20px; }
+    .features-header p { text-align: left; max-width: 100%; }
+    .features-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .contact-inner { grid-template-columns: 1fr; gap: 60px; }
+    footer { flex-direction: column; gap: 24px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">AP<span>EX</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Training</a></li>
+    <li><a href="#pricing">Membership</a></li>
+    <li><a href="#contact">Join</a></li>
+  </ul>
+  <button class="nav-cta">Start Now</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-text">APEX</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">High Performance Training — Est. 2015</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="outline">BUILT</span><br>
+      TO BE<br>
+      <span class="neon">UNBREAKABLE</span>
+    </h1>
+    <div class="hero-bottom">
+      <div>
+        <p class="hero-desc">No machines. No mirrors. No excuses. Apex is where serious athletes come to train — and where everyone else discovers they were serious all along.</p>
+        <div class="hero-ctas">
+          <a href="#pricing" class="cta-primary">Get Membership</a>
+          <a href="#features" class="cta-secondary">Our Programs</a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">3K+</div>
+          <div class="hero-stat-label">Members</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">48</div>
+          <div class="hero-stat-label">Classes/Week</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">12</div>
+          <div class="hero-stat-label">Expert Coaches</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-ticker">
+    <div class="ticker-inner">
+      <span class="ticker-item"><span class="ticker-dot"></span>STRENGTH TRAINING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>HIIT CLASSES</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>OLYMPIC LIFTING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>POWERLIFTING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>CONDITIONING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>PERSONAL TRAINING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>STRENGTH TRAINING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>HIIT CLASSES</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>OLYMPIC LIFTING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>POWERLIFTING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>CONDITIONING</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>PERSONAL TRAINING</span>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span class="section-eyebrow-text">What We Offer</span></div>
+  <div class="features-header">
+    <h2>ELITE<br><span class="outline">PROGRAMS</span></h2>
+    <p>Every program is engineered by professional coaches with one goal: your maximum potential. Nothing is wasted. Nothing is easy.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card">
+      <span class="feat-card-icon">🏋️</span>
+      <h3>Strength & Power</h3>
+      <p>Structured periodisation programs for building maximal strength. Squat, bench, deadlift — coached by former competitive powerlifters.</p>
+    </div>
+    <div class="feat-card">
+      <span class="feat-card-icon">⚡</span>
+      <h3>HIIT & Conditioning</h3>
+      <p>45-minute sessions designed to push your cardiovascular threshold. Heart rate monitored, intensity tracked, results guaranteed.</p>
+    </div>
+    <div class="feat-card">
+      <span class="feat-card-icon">🎯</span>
+      <h3>1-on-1 Coaching</h3>
+      <p>Fully personalised programming with a dedicated coach. Movement screening, goal-setting, and weekly check-ins included.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="pricing-header">
+    <div class="section-eyebrow" style="justify-content:center"><div class="section-eyebrow-line"></div><span class="section-eyebrow-text">Membership</span><div class="section-eyebrow-line"></div></div>
+    <h2>CHOOSE<br><span>YOUR</span> LEVEL</h2>
+    <p>No joining fees. No lock-in contracts. Cancel anytime.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <div class="plan-name">Recruit</div>
+      <div class="plan-price">$49</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Gym floor access</li>
+        <li>4 group classes/month</li>
+        <li>Locker room access</li>
+        <li>Basic app access</li>
+        <li>Community membership</li>
+      </ul>
+      <button class="plan-btn">Get Started</button>
+    </div>
+    <div class="plan featured">
+      <div class="plan-tag">Most Popular</div>
+      <div class="plan-name">Operator</div>
+      <div class="plan-price">$89</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Unlimited gym access</li>
+        <li>Unlimited group classes</li>
+        <li>Monthly coach check-in</li>
+        <li>Full app + tracking</li>
+        <li>Nutrition guidelines</li>
+        <li>Guest pass (2/month)</li>
+      </ul>
+      <button class="plan-btn">Get Started</button>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Elite</div>
+      <div class="plan-price">$179</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Everything in Operator</li>
+        <li>4 PT sessions/month</li>
+        <li>Custom program design</li>
+        <li>Body composition tracking</li>
+        <li>Priority class booking</li>
+        <li>Recovery room access</li>
+      </ul>
+      <button class="plan-btn">Get Started</button>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div>
+      <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span class="section-eyebrow-text">Get In</span></div>
+      <h2 class="contact-left">START<br><span class="ol">YOUR</span><br><span>TRIAL</span></h2>
+      <div class="contact-details">
+        <div class="contact-detail">
+          <span class="contact-detail-icon">📍</span>
+          <div><span class="contact-detail-label">Location</span><span class="contact-detail-val">182 Industrial Ave, Chicago IL 60601</span></div>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-icon">⏰</span>
+          <div><span class="contact-detail-label">Hours</span><span class="contact-detail-val">Mon–Fri: 5am–11pm · Sat–Sun: 6am–10pm</span></div>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-icon">📞</span>
+          <div><span class="contact-detail-label">Phone</span><span class="contact-detail-val">+1 (312) 555-0194</span></div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="return false">
+      <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span class="section-eyebrow-text">Free 7-Day Trial</span></div>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="MARCUS"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="JOHNSON"></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="YOUR@EMAIL.COM"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" placeholder="+1 (000) 000-0000"></div>
+      <div class="form-group">
+        <label>Goal</label>
+        <select>
+          <option>Build Muscle</option>
+          <option>Lose Fat</option>
+          <option>Increase Strength</option>
+          <option>Improve Conditioning</option>
+          <option>Athletic Performance</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Experience Level</label>
+        <select>
+          <option>Beginner (0–1 years)</option>
+          <option>Intermediate (1–3 years)</option>
+          <option>Advanced (3+ years)</option>
+          <option>Competitive Athlete</option>
+        </select>
+      </div>
+      <button class="form-submit">Claim Free Trial →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">AP<span>EX</span></div>
+  <div class="footer-links">
+    <a href="#">Programs</a><a href="#">Schedule</a><a href="#">Coaches</a><a href="#">Instagram</a>
+  </div>
+  <p class="footer-copy">© 2024 Apex Performance Gym</p>
+</footer>
+
+</body>
+</html>
