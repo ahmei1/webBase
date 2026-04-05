@@ -7,18 +7,18 @@ export default function About() {
   return (
     <section
       id="about"
-      className="bg-[#181818] text-white py-10 md:py-24 lg:py-32  sm:px-10 md:px-16"
+      className="bg-[#181818] text-white py-16 md:py-24 lg:py-32 px-6 sm:px-10 md:px-16"
     >
-      <div className="max-w-400 mx-auto flex flex-col">
+      <div className="max-w-7xl mx-auto flex flex-col">
 
         {/* ── Hero Text ── */}
         <div>
-          {/* Label — small, muted */}
+          {/* Label */}
           <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-400 mb-2">
             About Us.
           </h1>
 
-          {/* Big title — fluid clamp from ~40px → 105px */}
+          {/* Title */}
           <motion.h1
             initial={{ opacity: 0, y: -90 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -32,7 +32,7 @@ export default function About() {
           {/* Subtitle */}
           <p
             style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.5rem)" }}
-            className="text-gray-400 mt-4"
+            className="text-gray-400 mt-4 max-w-3xl"
           >
             — We transform ideas into fast, modern, and scalable websites.
           </p>
@@ -42,12 +42,10 @@ export default function About() {
 
         {/* ── Who We Are ── */}
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8 lg:gap-16 pt-16 md:pt-20 lg:pt-24">
-          {/* Left: handwritten title */}
           <div className="flex-shrink-0">
             <HandWrittenTitle title="Who We Are?" />
           </div>
 
-          {/* Right: body copy */}
           <motion.p
             initial={{ opacity: 0, x: 90 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -65,12 +63,10 @@ export default function About() {
 
         {/* ── Our Mission ── */}
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8 lg:gap-16 pt-16 md:pt-20 lg:pt-24">
-          {/* Left: handwritten title */}
           <div className="flex-shrink-0">
             <HandWrittenTitle title="Our Mission..." />
           </div>
 
-          {/* Right: body copy */}
           <motion.p
             initial={{ opacity: 0, x: 90 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -92,10 +88,10 @@ export default function About() {
         </div>
 
         {/* ── Stats ── */}
-        <div className="flex flex-col sm:flex-row justify-center items-stretch gap-5 sm:gap-6 md:gap-8 lg:gap-10 pt-16 md:pt-20 lg:pt-24">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-16 md:pt-20 lg:pt-24">
           {[
             { value: 40, label: "Projects Finished" },
-            { value: 5,  label: "Years Of Experience" },
+            { value: 5, label: "Years Of Experience" },
             { value: 35, label: "Clients WorldWide" },
           ].map(({ value, label }) => (
             <motion.div
@@ -103,8 +99,8 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               initial={{ opacity: 0, y: 30 }}
               transition={{ duration: 0.5 }}
-              className="flex-1 border-2 border-gray-700 hover:border-[#FF7F11]
-                transition duration-300 rounded-2xl p-6 md:p-8 text-center"
+              className="border-2 border-gray-700 hover:border-[#FF7F11]
+              transition duration-300 rounded-2xl p-6 md:p-8 text-center"
             >
               <h2
                 style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
@@ -121,6 +117,7 @@ export default function About() {
                   startCounting={false}
                 />
               </h2>
+
               <p
                 style={{ fontSize: "clamp(0.85rem, 1.4vw, 1.25rem)" }}
                 className="text-gray-400 mt-2"
@@ -132,10 +129,9 @@ export default function About() {
         </div>
 
         {/* ── Timeline ── */}
-        <div className="mt-16 w-full">
+        <div className="mt-20 w-full">
           <TimelineDemo />
         </div>
-
 
       </div>
     </section>

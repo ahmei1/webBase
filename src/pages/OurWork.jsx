@@ -9,9 +9,9 @@ import img8 from "../assets/Screenshot From 2026-03-21 20-42-46.png";
 import img9 from "../assets/Screenshot From 2026-03-24 12-04-08.png";
 import img10 from "../assets/Screenshot From 2026-03-24 14-51-03.png";
 import img11 from "../assets/dev-icon-181.svg";
+
 import StripeCard from "../Components/hoverCard";
-import { div, style } from "framer-motion/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 function OurWork() {
@@ -56,9 +56,10 @@ function OurWork() {
     {
       img: img6,
       bg: "#0D1164",
-      text1: "Pulse",
+      text1:
+        "Pulse is more than a cycling studio. It's 45 minutes of darkness, bass, and sweat.",
       text2:
-        "Pulse is more than a cycling studio. It's 45 minutes of darkness, bass, and sweat — where your only competition is the person you were yesterday.",
+        "Where your only competition is the person you were yesterday.",
       link: "/demos/10-pulse-cycling.html",
     },
     {
@@ -83,7 +84,7 @@ function OurWork() {
       bg: "#839705",
       text1: "APex",
       text2:
-        "No machines. No mirrors. No excuses. Apex is where serious athletes come to train — and where everyone else discovers they were serious all along.",
+        "No machines. No mirrors. No excuses. Apex is where serious athletes come to train.",
       link: "/demos/06-apex-gym.html",
     },
     {
@@ -104,17 +105,29 @@ function OurWork() {
   };
 
   return (
-    <section id="our-work" className="bg-[#0d0d0d] py-20 min-h-screen ">
-      <div className="flex text-3xl text-amber-50 justify-around ">
-        <h1 className="font-extrabold text-5xl">🔸OUR WORK IN ACTION</h1>
-        <p>
-          With Years Of Experience We Have Helped Many <br /> Clients TO
-          Approach Their Dream Websites
+    <section
+      id="our-work"
+      className="bg-[#0d0d0d] py-20 min-h-screen px-6 md:px-12 lg:px-24"
+    >
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row items-center lg:items-start text-center lg:text-left text-amber-50 gap-6 lg:justify-between">
+        <h1 className="font-extrabold text-3xl md:text-4xl lg:text-5xl">
+          🔸OUR WORK IN ACTION
+        </h1>
+
+        <p className="text-lg md:text-xl lg:text-2xl max-w-xl">
+          With Years Of Experience We Have Helped Many Clients To Approach
+          Their Dream Websites
         </p>
       </div>
-      <div className="text-amber-50 lg:grid lg:grid-cols-2 sm:grid-cols-1 gap-5 md:grid-cols-1 text-3xl py-30 px-50 ">
+
+      {/* Projects Grid */}
+      <div className="text-amber-50 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
         {initial.map((value, i) => (
-          <div className="transform transition-all duration-300" key={i - 1}>
+          <div
+            className="transform transition-all duration-300"
+            key={i}
+          >
             <StripeCard
               img={value.img}
               bg={value.bg}
@@ -126,16 +139,17 @@ function OurWork() {
         ))}
       </div>
 
-      {seeMore ? null : (
+      {/* See More Button */}
+      {!seeMore && (
         <motion.div
           initial={{ opacity: 0, y: -90 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="flex justify-center mt-10"
+          className="flex justify-center mt-16"
         >
           <button
             onClick={handleMore}
-            className="bg-[#FF7F11] flex  text-amber-50 font-bold text-2xl gap-3 hover:scale-120 px-6 py-3 rounded-lg cursor-pointer transform transition-all duration-400 ease"
+            className="bg-[#FF7F11] flex items-center text-amber-50 font-bold text-lg md:text-xl gap-3 hover:scale-110 px-6 py-3 rounded-lg cursor-pointer transition-all duration-300"
           >
             See More Projects
             <img width={15} height={15} src={img11} alt="more projects" />

@@ -32,8 +32,8 @@ function Navbar() {
           <div className="flex items-center justify-between md:justify-center md:gap-12">
             {/* LOGO */}
             <div className="flex">
-              <img className="w-20 h-20" src="src/assets/ahmed2.png" alt="" />
-              <h1 className="text-2xl md:text-4xl font-bold pt-5">
+              {/* <img className="w-20 h-20" src="src/assets/ahmed2.png" alt="" /> */}
+              <h1 className="text-2xl md:text-4xl font-bold p-5">
                 <a href="#home">
                   web<span className="text-[#FF7F11]">Base.</span>
                 </a>
@@ -45,7 +45,7 @@ function Navbar() {
               {navLinks.map((link) => (
                 <li
                   key={link.name}
-                  className="text-[17px] hover:text-[#FF7F11] transition-colors"
+                  className="text-[20px] hover:text-[#FF7F11] transition-colors"
                 >
                   <a href={link.href}>{link.name}</a>
                 </li>
