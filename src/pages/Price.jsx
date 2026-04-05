@@ -2,6 +2,7 @@ import "../App.css";
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
 import emailjs from "@emailjs/browser";
+import img from '../assets/4a2e85a3890f1f51c13010ef5fc49369-removebg-preview.png'
 
 function Price() {
   const [isOpen, setIsOpen] = useState(false);
@@ -96,7 +97,7 @@ function Price() {
           <div className="cards__card card bg-gray-900 p-6 rounded-xl shadow-lg">
             <p className="card__heading flex items-center gap-2 text-2xl font-bold mb-4">
               <img
-                src="src/assets/4a2e85a3890f1f51c13010ef5fc49369-removebg-preview.png"
+                src={img}
                 alt=""
                 className="w-12"
               />

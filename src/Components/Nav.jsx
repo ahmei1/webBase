@@ -105,7 +105,6 @@ function Navbar() {
 
             {/* Logo inside overlay */}
             <div className="absolute top-6 left-6 flex items-center">
-              <img className="w-14 h-14" src="src/assets/ahmed2.png" alt="" />
               <h1 className="text-2xl font-bold">
                 web<span className="text-[#FF7F11]">Base.</span>
               </h1>
